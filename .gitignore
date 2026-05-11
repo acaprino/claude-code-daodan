@@ -22,3 +22,6 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Upstream sync scratch (local-only, never committed)
+.upstream-scratch/

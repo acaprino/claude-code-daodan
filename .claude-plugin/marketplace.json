@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "Claude Code Daodan -- 39 plugins that augment Claude Code into a specialized toolkit. Agents, skills, and commands for code quality, Tauri/Rust development, frontend, AI tooling, scraping, trading, observability, and constraint programming.",
-    "version": "6.2.0"
+    "version": "6.2.1"
   },
   "plugins": [
     {
@@ -143,7 +143,7 @@
       "name": "react-development",
       "source": "./plugins/react-development",
       "description": "React performance optimization, React 19 API adoption, state management audit, bundle analysis, re-render detection, and Vercel best practices checklist",
-      "version": "1.9.1",
+      "version": "1.9.2",
       "author": {
         "name": "Alfio"
       },
