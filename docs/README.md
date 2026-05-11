@@ -1,8 +1,8 @@
-# ACP Documentation
+# Claude Code Daodan Documentation
 
-Custom Claude Code plugin marketplace. Agents, skills, and commands for development workflows, code quality, AI tooling, and more.
+The augmentation symbiote for Claude Code. Agents, skills, and commands for development workflows, code quality, AI tooling, and more.
 
-**Install:** `claude plugin marketplace add acaprino/alfio-claude-plugins`
+**Install:** `claude plugin marketplace add acaprino/claude-code-daodan`
 
 ## Plugin Index
 

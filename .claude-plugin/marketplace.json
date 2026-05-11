@@ -1,12 +1,12 @@
 {
-  "name": "alfio-claude-plugins",
+  "name": "claude-code-daodan",
   "owner": {
     "name": "Alfio",
     "email": ""
   },
   "metadata": {
-    "description": "Custom development workflow agents and skills for code quality, Tauri/Rust development, frontend optimization, AI tooling, and constraint programming optimization",
-    "version": "5.61.0"
+    "description": "Claude Code Daodan -- 39 plugins that augment Claude Code into a specialized toolkit. Agents, skills, and commands for code quality, Tauri/Rust development, frontend, AI tooling, scraping, trading, observability, and constraint programming.",
+    "version": "6.0.0"
   },
   "plugins": [
     {
@@ -832,7 +832,7 @@
     {
       "name": "acp-hooks",
       "source": "./plugins/acp-hooks",
-      "description": "ACP session hooks -- skill awareness injection, PreToolUse security gate that BLOCKS hardcoded secrets before they reach disk, autocompact when context is high, cleanup of duplicate built-in plugins, brainstorm gate for creative/building prompts, review gate for PR/merge operations, docs gate for documentation auditing, and team spawn gate with runtime-generated agent catalog from marketplace.json (no more drift from hardcoded lists)",
+      "description": "Claude Code Daodan session hooks -- skill awareness injection, PreToolUse security gate that BLOCKS hardcoded secrets before they reach disk, autocompact when context is high, cleanup of duplicate built-in plugins, brainstorm gate for creative/building prompts, review gate for PR/merge operations, docs gate for documentation auditing, and team spawn gate with runtime-generated agent catalog from marketplace.json (no more drift from hardcoded lists)",
       "version": "3.0.0",
       "author": {
         "name": "Alfio"

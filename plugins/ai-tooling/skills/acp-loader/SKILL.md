@@ -1,12 +1,14 @@
 ---
 name: acp-loader
 description: >
-  Skill activation engine that ensures relevant ACP skills are invoked for every task.
+  Skill activation engine that ensures relevant marketplace skills are invoked for every task.
   TRIGGER WHEN: ALWAYS at conversation start and before every task.
   DO NOT TRIGGER WHEN: dispatched as a subagent.
 ---
 
-# ACP Loader - Skill Activation Engine
+# Skill Activation Engine
+
+(Plugin id `acp-loader` kept for install compatibility.)
 
 The loader that ensures every skill gets activated. Without this, skills sit idle while Claude improvises solutions that already have purpose-built workflows.
 
@@ -24,10 +26,10 @@ This is not negotiable. This is not optional. You cannot rationalize your way ou
 
 ## Instruction Priority
 
-ACP skills override default system prompt behavior, but **user instructions always take precedence**:
+Marketplace skills override default system prompt behavior, but **user instructions always take precedence**:
 
 1. **User's explicit instructions** (CLAUDE.md, direct requests) -- highest priority
-2. **ACP skills** -- override default system behavior where they conflict
+2. **Marketplace skills** -- override default system behavior where they conflict
 3. **Default system prompt** -- lowest priority
 
 If CLAUDE.md says "don't use TDD" and a skill says "always use TDD," follow the user's instructions. The user is in control.

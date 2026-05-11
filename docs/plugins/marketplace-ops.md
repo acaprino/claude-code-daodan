@@ -1,12 +1,12 @@
 # Marketplace Ops Plugin
 
-> Manage and maintain the ACP plugin ecosystem -- audit marketplace integrity, scaffold new plugins, create skills and agents, and review content quality.
+> Manage and maintain the Claude Code Daodan plugin ecosystem -- audit marketplace integrity, scaffold new plugins, create skills and agents, and review content quality.
 
 ## Agents
 
 ### `marketplace-manager`
 
-Expert marketplace operations manager for ACP.
+Expert marketplace operations manager for Claude Code Daodan.
 
 | | |
 |---|---|
@@ -46,7 +46,7 @@ Structural validation of the marketplace ecosystem.
 
 ### `skills-creator`
 
-Guided creation of new ACP components.
+Guided creation of new Claude Code Daodan components.
 
 | | |
 |---|---|

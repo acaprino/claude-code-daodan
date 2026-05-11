@@ -1,11 +1,13 @@
 <div align="center">
 
-# ACP - Alfio Caprino Claude Code Plugins
+# Claude Code Daodan
 
-**39 specialized plugins for Claude Code -- so you spend less time prompting and more time shipping.**
+**39 specialized plugins that augment Claude Code into a specialized toolkit -- so you spend less time prompting and more time shipping.**
+
+> The Daodan is the symbiote that enhances its host. This marketplace is the Daodan of Claude Code.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue?style=flat)](LICENSE)
-[![Marketplace](https://img.shields.io/badge/marketplace-v5.56.0-green?style=flat)](.claude-plugin/marketplace.json)
+[![Marketplace](https://img.shields.io/badge/marketplace-v6.0.0-green?style=flat)](.claude-plugin/marketplace.json)
 [![Plugins](https://img.shields.io/badge/plugins-39-orange?style=flat)](#plugins)
 [![Agents](https://img.shields.io/badge/agents-67-purple?style=flat)](#plugins)
 [![Skills](https://img.shields.io/badge/skills-66-teal?style=flat)](#plugins)
@@ -15,7 +17,7 @@
 
 ---
 
-## Why ACP?
+## Why Claude Code Daodan?
 
 - **Domain experts, not generic prompts** -- each plugin encodes months of specialized knowledge (Python, Rust, React, security, SEO, legal...)
 - **Multi-agent orchestration** -- code review fires architecture, security, and pattern analysis in parallel
@@ -27,12 +29,12 @@
 
 ```bash
 # Add the marketplace
-claude plugin marketplace add acaprino/alfio-claude-plugins
+claude plugin marketplace add acaprino/claude-code-daodan
 
 # Install the plugins you need
-claude plugin install python-development@alfio-claude-plugins
-claude plugin install senior-review@alfio-claude-plugins
-claude plugin install frontend@alfio-claude-plugins
+claude plugin install python-development@claude-code-daodan
+claude plugin install senior-review@claude-code-daodan
+claude plugin install frontend@claude-code-daodan
 ```
 
 That's it. Plugins activate automatically when relevant -- or invoke them directly:
@@ -115,7 +117,7 @@ Plugins are pure Markdown with optional JS/Python helper scripts. No build step,
 <summary><b>Project Structure</b></summary>
 
 ```
-acp/
+claude-code-daodan/
 ├── .claude-plugin/
 │   └── marketplace.json       # plugin registry
 ├── docs/plugins/              # per-plugin documentation
@@ -137,8 +139,8 @@ acp/
 <summary><b>Local Development Install</b></summary>
 
 ```bash
-git clone https://github.com/acaprino/alfio-claude-plugins.git
-claude plugin install ./acp/plugins/python-development
+git clone https://github.com/acaprino/claude-code-daodan.git
+claude plugin install ./claude-code-daodan/plugins/python-development
 ```
 
 </details>

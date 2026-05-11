@@ -43,7 +43,7 @@ try {
 }
 
 try {
-  const context = `<IMPORTANT>\nYou have the ACP skill system.\n\n**Below is the full content of your 'ai-tooling:acp-loader' skill -- your guide to using skills. For all other skills, use the 'Skill' tool:**\n\n${skillContent}\n</IMPORTANT>`;
+  const context = `<IMPORTANT>\nYou have the Claude Code Daodan skill system.\n\n**Below is the full content of your 'ai-tooling:acp-loader' skill -- your guide to using skills. For all other skills, use the 'Skill' tool:**\n\n${skillContent}\n</IMPORTANT>`;
 
   const output = {
     hookSpecificOutput: {

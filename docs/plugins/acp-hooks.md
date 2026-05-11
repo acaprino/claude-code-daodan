@@ -1,6 +1,6 @@
 # ACP Hooks Plugin
 
-> Session lifecycle hooks for the ACP ecosystem: skill awareness, security enforcement, automatic context management, brainstorm gating, code review gating, documentation gating, and team spawn suggestions.
+> Session lifecycle hooks for the Claude Code Daodan ecosystem: skill awareness, security enforcement, automatic context management, brainstorm gating, code review gating, documentation gating, and team spawn suggestions.
 
 **Note:** This plugin uses `plugin.json` for hook configuration instead of marketplace registration. Hooks run automatically; no manual invocation needed.
 
@@ -13,7 +13,7 @@ These run automatically when a Claude Code session starts:
 | Handler | Purpose |
 |---------|---------|
 | `skill-awareness.js` | Injects skill awareness so Claude knows which skills are available |
-| `cleanup-builtins.js` | Removes duplicate built-in plugins that conflict with ACP |
+| `cleanup-builtins.js` | Removes duplicate built-in plugins that conflict with Claude Code Daodan |
 
 ### UserPromptSubmit hooks
 

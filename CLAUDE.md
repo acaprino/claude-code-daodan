@@ -1,6 +1,6 @@
-# ACP
+# Claude Code Daodan
 
-Custom Claude Code plugin marketplace. Contains agents, skills, and commands for development workflows, code quality, AI tooling, and more. Remote: `acaprino/alfio-claude-plugins` on GitHub.
+The Daodan is the symbiote that augments its host. This repository is the Daodan of Claude Code: a marketplace of agents, skills, and commands that augment the base model into a specialized toolkit covering development workflows, code quality, AI tooling, scraping, trading, observability, and more. Remote: `acaprino/claude-code-daodan` on GitHub.
 
 ## Project structure
 
@@ -55,7 +55,7 @@ When changes modify plugins (agents, skills, commands), update the marketplace *
 Key fields in `.claude-plugin/marketplace.json`:
 - `metadata.version`: overall marketplace version
 - `plugins[].version`: per-plugin version
-- Install command: `claude plugin marketplace add acaprino/alfio-claude-plugins`
+- Install command: `claude plugin marketplace add acaprino/claude-code-daodan`
 
 ## Adding a new plugin
 
