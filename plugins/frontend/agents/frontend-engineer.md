@@ -38,3 +38,7 @@ Hands-on frontend engineer. Design architecture AND write production code.
 - Component files focused and single-purpose
 - No inline styles in production code
 - Test interactive states: hover, focus, active, disabled, loading, error, empty
+
+## References
+
+When a sub-topic needs detailed guidance during build, consult `plugins/frontend/skills/frontend-css/SKILL.md` (References Library section). It indexes 12 reference files covering CSS architecture, layout recipes, UX/UI patterns, typography, color, motion, Nielsen heuristics scoring, cognitive load, and persona-based design testing. Read only the file you need for the current task; do not preload everything.

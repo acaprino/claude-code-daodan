@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "Claude Code Daodan -- 39 plugins that augment Claude Code into a specialized toolkit. Agents, skills, and commands for code quality, Tauri/Rust development, frontend, AI tooling, scraping, trading, observability, and constraint programming.",
-    "version": "6.0.0"
+    "version": "6.1.0"
   },
   "plugins": [
     {
@@ -92,8 +92,8 @@
     {
       "name": "frontend",
       "source": "./plugins/frontend",
-      "description": "Unified frontend toolkit: frontend-design (CSS, motion, UX), frontend-layout (grid, breakpoints), frontend-engineer (build), frontend-strategy (consulting workflow), frontend-css (modern CSS reference with typography, color/contrast, motion, heuristics scoring, cognitive load, personas, and merged spatial/interaction/responsive/UX-writing sections from pbakaus/impeccable), and component-library skills (shadcn-ui, daisyUI, Radix UI)",
-      "version": "3.12.0",
+      "description": "Unified frontend toolkit: frontend-design (CSS, motion, UX), frontend-layout (grid, breakpoints), frontend-engineer (build), frontend-strategy (consulting workflow), frontend-css (modern CSS reference with typography, color/contrast, motion, heuristics scoring, cognitive load, personas, and merged spatial/interaction/responsive/UX-writing sections from pbakaus/impeccable), and component-library skills (shadcn-ui, daisyUI, Radix UI). /review-design and the design/layout agents now actively load these references during audits.",
+      "version": "3.13.0",
       "author": {
         "name": "Alfio"
       },

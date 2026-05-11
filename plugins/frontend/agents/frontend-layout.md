@@ -61,13 +61,22 @@ CSS layout patterns for common page structures are extracted to a reference file
 
 Available patterns: Holy Grail, Full-Bleed, Split Screen, Organic/Anti-Grid, Editorial Asymmetry, Bento Grid, Sidebar+Main, Masonry, Centered Narrow, Stacked Sections, Card Grid with Subgrid.
 
+The same file also carries a **Spatial Design Principles** section (4pt base scale, hierarchy through size+weight+color+position+space, container queries, optical adjustments, semantic z-index scales) -- consult it before proposing a new grid.
+
 ## UI Pattern Selection Guide
 
 Decision rules for choosing the right component pattern per layout context are extracted to a reference file.
 
 **To access the guide, use the Read tool:** `Read plugins/frontend/skills/frontend-css/references/ui-pattern-guide.md`
 
-Covers: Content Display (Cards/List/Table/Gallery/Carousel), Navigation Patterns, Content Loading (Pagination/Scroll/Load More), Page Archetypes (Dashboard/Product/Pricing/Wizard/FAQ), Overlays, Feeds.
+Covers: Content Display (Cards/List/Table/Gallery/Carousel), Navigation Patterns, Content Loading (Pagination/Scroll/Load More), Page Archetypes (Dashboard/Product/Pricing/Wizard/FAQ), Overlays, Feeds. The same file also includes an **Interaction Design** section (8 interactive states, focus-visible rings, Popover API + anchor positioning, dropdown overflow-clipping anti-pattern, undo > confirm, roving tabindex, gesture discoverability) -- read it when specifying interactive component behavior.
+
+## Typography & Responsive Foundations
+
+When breakpoints, type scale, or input-method behavior matters for a layout decision:
+
+- **Typography** (`Read plugins/frontend/skills/frontend-css/references/typography.md`): modular scale (5 sizes with `>= 1.25` ratio), measure in `ch`, fluid type bounds (`max <= ~2.5 x min`), `text-wrap: balance` / `pretty`, ALL-CAPS letter-spacing rules
+- **Responsive Foundations** (in `Read plugins/frontend/skills/frontend-css/references/css-patterns.md`, appended section): mobile-first writing discipline, content-driven breakpoint discovery, `(pointer: fine|coarse)` and `(hover: hover|none)` input detection, `env(safe-area-inset-*)` for notches, `srcset` + `sizes` for responsive images
 
 ## Above-the-Fold Engineering
 

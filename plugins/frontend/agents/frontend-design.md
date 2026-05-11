@@ -229,14 +229,26 @@ const animationProps = prefersReducedMotion ? {} : { initial: { opacity: 0 }, an
 - Emotional peaks: celebration states, storytelling empty states, anticipation-building loading
 - Anti-patterns: too-small/too-large corners, equal visual weight, wrong easing direction, cramped padding
 
-## UX Pattern Reference
+## Reference Library
 
-Detailed decision guides are in the `frontend` skill reference files:
-- **UX patterns**: `Read plugins/frontend/skills/frontend-css/references/ux-patterns.md`
-- **UI patterns**: `Read plugins/frontend/skills/frontend-css/references/ui-pattern-guide.md`
-- **Layout patterns**: `Read plugins/frontend/skills/frontend-css/references/layout-patterns.md`
-- **Flow patterns**: `Read plugins/frontend/skills/frontend-css/references/flow-patterns.md`
-- **CSS patterns**: `Read plugins/frontend/skills/frontend-css/references/css-patterns.md`
+Detailed guides live in `plugins/frontend/skills/frontend-css/references/`. Read only the file you need for the task; do not preload everything.
+
+### Domain references
+- **Typography** (`typography.md`): vertical rhythm, modular scale, font selection anti-reflexes, web font loading (`font-display`, fallback metrics, variable fonts), fluid type bounds, OpenType features, rendering polish
+- **Color & Contrast** (`color-and-contrast.md`): OKLCH (not HSL), tinted neutrals, palette roles (Primary/Neutral/Semantic/Surface), 60-30-10 visual weight, WCAG contrast tiers, dark mode as different design, alpha-is-a-smell
+- **Motion** (`motion-design.md`): 100/300/500 duration rule, exponential easing (quart/quint/expo), anti-bounce/anti-elastic, premium motion materials (blur/filter/clip-path), reduced motion, perceived performance (80ms threshold, peak-end)
+
+### Evaluation frameworks
+- **Nielsen heuristics** (`heuristics-scoring.md`): 10 heuristics with 0-4 scoring rubric, total /40 rating ladder, P0-P3 severity tagging for findings
+- **Cognitive load** (`cognitive-load.md`): intrinsic/extraneous/germane load, 8-item checklist, working-memory rule (`<=4` items), 8 common violations (Wall of Options, Memory Bridge, Visual Noise Floor, etc.)
+- **Personas** (`personas.md`): 5 critique archetypes (Alex impatient power user, Jordan confused first-timer, Sam accessibility-dependent, Riley stress tester, Casey distracted mobile) for walking the primary flow
+
+### Pattern guides
+- **UX patterns** (`ux-patterns.md`): onboarding/trust/persuasion/cognitive-load decisions + **UX Writing** section (button labels, error formulas, voice/tone, i18n, terminology)
+- **UI patterns** (`ui-pattern-guide.md`): component pattern selection + **Interaction Design** section (8 states, focus-visible, Popover API, anchor positioning, undo > confirm, keyboard nav)
+- **Layout patterns** (`layout-patterns.md`): CSS recipes + **Spatial Design Principles** section (4pt scale, hierarchy via multiple dimensions, container queries, optical adjustments, elevation)
+- **Flow patterns** (`flow-patterns.md`): user flow recipes
+- **CSS patterns** (`css-patterns.md`): container queries / color-mix / SASS migration / BEM / CSS Modules / focus management + **Responsive Foundations** section (mobile-first, content-driven breakpoints, pointer detection, safe areas)
 
 ## Quality Checklist
 

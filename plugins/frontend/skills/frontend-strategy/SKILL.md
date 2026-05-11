@@ -98,7 +98,7 @@ Compile discovery into a professional brief document. Use the `references/websit
 
 Sections:
 - Executive summary (2-3 sentences)
-- Target audience profile (demographics, goals, pain points, device behavior)
+- Target audience profile (demographics, goals, pain points, device behavior). For persona-style critique testing during Phase 5 review, consult `plugins/frontend/skills/frontend-css/references/personas.md` (5 archetypes: Alex impatient power user, Jordan confused first-timer, Sam accessibility-dependent, Riley stress tester, Casey distracted mobile)
 - Competitor analysis (table: site, strengths, weaknesses, design quality, key takeaway)
 - Value proposition (what makes this business different, stated in one sentence)
 - Brand personality (3 adjectives from discovery with explanation of each)
@@ -235,7 +235,7 @@ Sections:
 - CTA placement checklist (where, what type, what copy)
 - SEO keyword map (table: page, primary keyword, secondary keywords, search intent, meta title, meta description)
 - Content types (blog, case studies, testimonials, video - with purpose for each)
-- Tone guidelines (voice attributes, do/don't examples tied to brand tone from discovery)
+- Tone guidelines (voice attributes, do/don't examples tied to brand tone from discovery). For tactical UX-writing patterns (button labels, error message formulas, voice vs tone shifts per moment, i18n expansion, terminology consistency) consult `plugins/frontend/skills/frontend-css/references/ux-patterns.md` (UX Writing section)
 
 **Peak-End Rule:**
 - Every page ends with a strong CTA or clear next step - never a dead end

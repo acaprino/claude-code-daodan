@@ -113,6 +113,14 @@ Task:
     ## Linter Output (if available)
     [paste axe-core accessibility report if captured in Step 1.5, or "No linter output available"]
 
+    ## Reference Files to Read
+    Before evaluating, load these for structured frameworks (use the Read tool):
+    - `plugins/frontend/skills/frontend-css/references/heuristics-scoring.md` -- Nielsen's 10 heuristics with 0-4 scoring rubric and P0-P3 severity ladder for tagging issues
+    - `plugins/frontend/skills/frontend-css/references/cognitive-load.md` -- 8-item cognitive-load checklist, working memory rule (`<=4` items), 8 common violations
+    - `plugins/frontend/skills/frontend-css/references/personas.md` -- 5 archetypes (Alex/Jordan/Sam/Riley/Casey) for walking through the primary flow
+    - `plugins/frontend/skills/frontend-css/references/ux-patterns.md` -- UX decision patterns + UX Writing section
+    - `plugins/frontend/skills/frontend-css/references/ui-pattern-guide.md` -- Component pattern selection + Interaction Design section
+
     ## Instructions
     Evaluate:
     1. **Component responsibility**: God components, missing abstractions, component prop explosion
@@ -145,17 +153,26 @@ Task:
     13. **Compliance-driven UX**: European Accessibility Act readiness, WCAG 2.2 new criteria (focus appearance 2.4.11, target size 2.5.8), AI transparency requirements
     14. **Digital wellbeing**: Natural pause points, addictive pattern detection (dark patterns, infinite scroll without purpose), attention budget
     15. **Sustainable UX**: Energy-efficient patterns (dark mode, reduced animations option, lazy loading), resource-heavy anti-patterns (autoplay video, excessive polling)
+    16. **Nielsen heuristics scoring**: using `heuristics-scoring.md`, score each of the 10 heuristics on 0-4. Compute total /40 and the rating bucket (Excellent/Good/Acceptable/Poor/Critical). Tag every issue elsewhere in this report with a P0-P3 priority from the same reference.
+    17. **Cognitive load audit**: using `cognitive-load.md`, run the 8-item checklist and count failures (0-1 low, 2-3 moderate, 4+ critical). Call out specific violations by name (Wall of Options, Memory Bridge, Visual Noise Floor, Context Switch, etc.) and which working-memory rule each one breaks.
+    18. **Persona walkthrough**: using `personas.md`, pick 2-3 personas most relevant to the interface type and walk the primary user flow as each one. Report specific red flags from each persona's perspective, not generic concerns.
 
-    For each finding: severity (Critical/High/Medium/Low), file, issue, specific fix recommendation.
+    For each finding: severity (Critical/High/Medium/Low), file, issue, specific fix recommendation, and a P0-P3 priority tag.
     Note what's working well.
 
     Return structured JSON at the end:
     ```json
     {
       "findings": [
-        { "severity": "High", "category": "Accessibility", "file": "...", "issue": "...", "fix": "..." }
+        { "severity": "High", "priority": "P1", "category": "Accessibility", "file": "...", "issue": "...", "fix": "..." }
       ],
       "positives": ["..."],
+      "nielsen": { "total": 28, "rating": "Good", "by_heuristic": { "1_visibility": 3, "2_match": 4, "3_control": 2, "4_consistency": 3, "5_prevention": 2, "6_recognition": 3, "7_flexibility": 3, "8_aesthetic": 3, "9_recovery": 2, "10_help": 3 } },
+      "cognitive_load": { "failures": 2, "verdict": "moderate", "violations": ["Wall of Options on /settings", "Memory Bridge between checkout step 2 and 3"] },
+      "personas_tested": ["Alex", "Jordan", "Casey"],
+      "persona_red_flags": [
+        { "persona": "Alex", "flags": ["no keyboard shortcut for primary action", "forced onboarding cannot be skipped"] }
+      ],
       "score": { "ux_consistency": 7, "accessibility": 5, "component_design": 8, "overall": 7 }
     }
     ```
@@ -178,6 +195,13 @@ Task:
 
     ## Product Brief (if available)
     [paste brief content or "No product brief found -- evaluate against general layout best practices"]
+
+    ## Reference Files to Read
+    Before evaluating, load these (use the Read tool):
+    - `plugins/frontend/skills/frontend-css/references/layout-patterns.md` -- layout recipes + **Spatial Design Principles** section (4pt scale, hierarchy through multiple dimensions, container queries, optical adjustments, depth/elevation)
+    - `plugins/frontend/skills/frontend-css/references/ui-pattern-guide.md` -- component pattern selection + **Interaction Design** section (8 states, focus rings, Popover API, anchor positioning, keyboard nav)
+    - `plugins/frontend/skills/frontend-css/references/typography.md` -- modular scale, fluid type bounds, vertical rhythm formulas, system tokens
+    - `plugins/frontend/skills/frontend-css/references/css-patterns.md` -- CSS recipes + **Responsive Foundations** section (mobile-first, content-driven breakpoints, pointer detection, safe areas)
 
     ## Instructions
     Evaluate:
@@ -231,6 +255,12 @@ Task:
 
     ## Linter Output (if available)
     [paste stylelint JSON report if captured in Step 1.5, or "No linter output available"]
+
+    ## Reference Files to Read
+    Before evaluating, load these (use the Read tool):
+    - `plugins/frontend/skills/frontend-css/references/color-and-contrast.md` -- OKLCH spaces, tinted neutrals, palette structure (60-30-10), WCAG, dark mode rules, alpha smell
+    - `plugins/frontend/skills/frontend-css/references/typography.md` -- font loading strategies (`font-display`, fallback metrics, variable fonts), fluid type bounds, OpenType features, rendering polish
+    - `plugins/frontend/skills/frontend-css/references/css-patterns.md` -- CSS recipes + **Responsive Foundations** section
 
     ## Instructions
     Evaluate:
@@ -298,6 +328,11 @@ Task:
 
     ## Product Brief (if available)
     [paste brief content or "No product brief found -- evaluate against general visual polish best practices"]
+
+    ## Reference Files to Read
+    Before evaluating, load these (use the Read tool):
+    - `plugins/frontend/skills/frontend-css/references/motion-design.md` -- 100/300/500 duration rule, exponential easing curves, anti-bounce/anti-elastic, premium motion materials, reduced-motion, perceived performance (80ms threshold, peak-end)
+    - `plugins/frontend/skills/frontend-css/references/color-and-contrast.md` -- dark-mode-as-different-design, alpha smell, depth via lightness not shadow
 
     ## Instructions
     Evaluate:
