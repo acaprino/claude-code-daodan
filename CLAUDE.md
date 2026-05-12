@@ -418,6 +418,24 @@ for cmd in deps-audit refactor-clean tech-debt; do
   gh api "repos/wshobson/agents/contents/plugins/codebase-cleanup/commands/$cmd.md" \
     --jq '.content' | base64 -d
 done
+
+# Fetch latest kotlin-specialist files from upstream (Jeffallan/claude-skills, MIT full vendor)
+# Local target: plugins/kotlin-development/skills/kotlin-specialist/
+# MIT: preserve the attribution comment immediately after the YAML frontmatter on SKILL.md
+# and at the top of every reference file.
+# Adaptation on sync: strip upstream extra frontmatter fields (license, metadata.author,
+# version, domain, triggers, role, scope, output-format, related-skills); keep only
+# `name` and `description` in local frontmatter; rewrite the upstream single-paragraph
+# `description` into local `description: >` multiline form with TRIGGER WHEN /
+# DO NOT TRIGGER WHEN routing. Drop the upstream `[Documentation](https://jeffallan.github.io/...)`
+# link at the bottom of SKILL.md. Preserve single-connector em-dashes ("X — Y") inside
+# code comments (they are NOT bracketed asides; the dash-aside rule does not apply).
+gh api repos/Jeffallan/claude-skills/contents/skills/kotlin-specialist/SKILL.md \
+  --jq '.content' | base64 -d
+for ref in coroutines-flow multiplatform-kmp android-compose ktor-server dsl-idioms; do
+  gh api "repos/Jeffallan/claude-skills/contents/skills/kotlin-specialist/references/$ref.md" \
+    --jq '.content' | base64 -d
+done
 ```
 
 Then compare with the local file, apply upstream changes while preserving local additions (source attribution line at top of each file), bump the plugin version, bump `metadata.version`, and commit + push.
