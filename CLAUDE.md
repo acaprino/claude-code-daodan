@@ -15,7 +15,7 @@ plugins/
     hooks/                  # hook handlers (JS/Python) + hooks.json (acp-hooks, prompt-improver)
 ```
 
-39 plugins: clean-code, deep-dive-analysis, tauri-development, frontend, react-development, xterm, ai-tooling, python-development, stripe, system-utils, messaging, research, business, project-setup, app-analyzer, typescript-development, csp, digital-marketing, senior-review, obsidian-development, browser-extensions, learning, marketplace-ops, playwright-skill, acp-hooks, prompt-improver, cc-usage, codebase-mapper, git-worktrees, rag-development, docs, testing, platform-engineering, ibkr-trading, mt5-trading, opentelemetry, docker, grabber-development, agent-teams.
+40 plugins: clean-code, deep-dive-analysis, tauri-development, frontend, react-development, xterm, ai-tooling, python-development, stripe, system-utils, messaging, research, business, project-setup, app-analyzer, typescript-development, csp, digital-marketing, senior-review, obsidian-development, browser-extensions, learning, marketplace-ops, playwright-skill, acp-hooks, prompt-improver, cc-usage, codebase-mapper, git-worktrees, rag-development, docs, testing, platform-engineering, ibkr-trading, mt5-trading, opentelemetry, docker, grabber-development, agent-teams, reverse-engineering.
 
 ## Plugin anatomy
 
@@ -231,6 +231,7 @@ When the user asks for "upstream updates" (or similar), this is the default work
 | `frontend` (impeccable cherry-pick, Apache-2.0) | `pbakaus/impeccable` - `skill/reference/` | New files: `plugins/frontend/skills/frontend-css/references/{typography,color-and-contrast,motion-design,heuristics-scoring,cognitive-load,personas}.md`, `plugins/frontend/skills/frontend-strategy/references/brand-register.md`. Merged sections (appended, delimited by attribution comment): `plugins/frontend/skills/frontend-css/references/{layout-patterns,ui-pattern-guide,css-patterns,ux-patterns}.md` |
 | `frontend` (ui-ux-pro-max cherry-pick, MIT) | `nextlevelbuilder/ui-ux-pro-max-skill` - `.claude/skills/design-system/references/` | `plugins/frontend/skills/frontend-css/references/{token-architecture,primitive-tokens,semantic-tokens,component-tokens,component-specs,states-and-variants,tailwind-integration}.md` |
 | `frontend` (NOTICE propagation, Apache-2.0 / MIT) | `pbakaus/impeccable` - `NOTICE.md` | `plugins/frontend/NOTICE.md` (consolidated upstream NOTICE chain: Impeccable -> Anthropic frontend-design + ehmo/typecraft-guide-skill, plus ui-ux-pro-max-skill MIT acknowledgement). The `ehmo/typecraft-guide-skill` lineage is also reflected in the attribution header of `plugins/frontend/skills/frontend-css/references/typography.md`. |
+| `reverse-engineering` | `wshobson/agents` - `plugins/reverse-engineering/` | `plugins/reverse-engineering/agents/*.md` (firmware-analyst, malware-analyst, reverse-engineer), `plugins/reverse-engineering/skills/*/SKILL.md` (anti-reversing-techniques, binary-analysis-patterns, memory-forensics, protocol-reverse-engineering), `plugins/reverse-engineering/skills/anti-reversing-techniques/references/advanced-techniques.md` |
 
 ### How to sync a plugin
 
@@ -384,6 +385,20 @@ done
 # Local target: plugins/frontend/NOTICE.md (consolidates the upstream attribution chain
 # for Impeccable, Anthropic frontend-design, ehmo/typecraft-guide-skill, and ui-ux-pro-max-skill).
 gh api repos/pbakaus/impeccable/contents/NOTICE.md \
+  --jq '.content' | base64 -d
+
+# Fetch latest reverse-engineering plugin files from upstream (wshobson/agents example)
+# Local target: plugins/reverse-engineering/
+# MIT: preserve the attribution comment immediately after the YAML frontmatter in each file.
+for agent in firmware-analyst malware-analyst reverse-engineer; do
+  gh api "repos/wshobson/agents/contents/plugins/reverse-engineering/agents/$agent.md" \
+    --jq '.content' | base64 -d
+done
+for skill in anti-reversing-techniques binary-analysis-patterns memory-forensics protocol-reverse-engineering; do
+  gh api "repos/wshobson/agents/contents/plugins/reverse-engineering/skills/$skill/SKILL.md" \
+    --jq '.content' | base64 -d
+done
+gh api "repos/wshobson/agents/contents/plugins/reverse-engineering/skills/anti-reversing-techniques/references/advanced-techniques.md" \
   --jq '.content' | base64 -d
 ```
 

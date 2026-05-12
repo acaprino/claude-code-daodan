@@ -5,8 +5,8 @@
     "email": ""
   },
   "metadata": {
-    "description": "Claude Code Daodan -- 39 plugins that augment Claude Code into a specialized toolkit. Agents, skills, and commands for code quality, Tauri/Rust development, frontend, AI tooling, scraping, trading, observability, and constraint programming.",
-    "version": "6.3.0"
+    "description": "Claude Code Daodan -- 40 plugins that augment Claude Code into a specialized toolkit. Agents, skills, and commands for code quality, Tauri/Rust development, frontend, AI tooling, scraping, trading, observability, reverse engineering, and constraint programming.",
+    "version": "6.4.0"
   },
   "plugins": [
     {
@@ -1348,6 +1348,39 @@
         "./commands/team-research.md",
         "./commands/team-design.md",
         "./commands/team-codebase-map.md"
+      ]
+    },
+    {
+      "name": "reverse-engineering",
+      "source": "./plugins/reverse-engineering",
+      "description": "Binary reverse engineering, malware analysis, firmware security, and software protection research for authorized security research, CTF competitions, and defensive security. Includes specialist agents (reverse-engineer, malware-analyst, firmware-analyst) and reference skills covering binary analysis patterns, anti-reversing techniques, memory forensics, and network protocol reverse engineering.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Dávid Balatoni"
+      },
+      "license": "MIT",
+      "keywords": [
+        "reverse-engineering",
+        "malware-analysis",
+        "firmware-security",
+        "binary-analysis",
+        "memory-forensics",
+        "protocol-reverse-engineering",
+        "ctf",
+        "security-research"
+      ],
+      "category": "security",
+      "strict": false,
+      "agents": [
+        "./agents/reverse-engineer.md",
+        "./agents/malware-analyst.md",
+        "./agents/firmware-analyst.md"
+      ],
+      "skills": [
+        "./skills/binary-analysis-patterns",
+        "./skills/anti-reversing-techniques",
+        "./skills/memory-forensics",
+        "./skills/protocol-reverse-engineering"
       ]
     }
   ]
