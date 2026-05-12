@@ -15,7 +15,7 @@ plugins/
     hooks/                  # hook handlers (JS/Python) + hooks.json (acp-hooks, prompt-improver)
 ```
 
-40 plugins: clean-code, deep-dive-analysis, tauri-development, frontend, react-development, xterm, ai-tooling, python-development, stripe, system-utils, messaging, research, business, project-setup, app-analyzer, typescript-development, csp, digital-marketing, senior-review, obsidian-development, browser-extensions, learning, marketplace-ops, playwright-skill, acp-hooks, prompt-improver, cc-usage, codebase-mapper, git-worktrees, rag-development, docs, testing, platform-engineering, ibkr-trading, mt5-trading, opentelemetry, docker, grabber-development, agent-teams, reverse-engineering.
+41 plugins: clean-code, deep-dive-analysis, tauri-development, frontend, react-development, xterm, ai-tooling, python-development, stripe, system-utils, messaging, research, business, project-setup, app-analyzer, typescript-development, csp, digital-marketing, senior-review, obsidian-development, browser-extensions, learning, marketplace-ops, playwright-skill, acp-hooks, prompt-improver, cc-usage, codebase-mapper, git-worktrees, rag-development, docs, testing, platform-engineering, ibkr-trading, mt5-trading, opentelemetry, docker, grabber-development, agent-teams, reverse-engineering, codebase-cleanup.
 
 ## Plugin anatomy
 
@@ -232,6 +232,7 @@ When the user asks for "upstream updates" (or similar), this is the default work
 | `frontend` (ui-ux-pro-max cherry-pick, MIT) | `nextlevelbuilder/ui-ux-pro-max-skill` - `.claude/skills/design-system/references/` | `plugins/frontend/skills/frontend-css/references/{token-architecture,primitive-tokens,semantic-tokens,component-tokens,component-specs,states-and-variants,tailwind-integration}.md` |
 | `frontend` (NOTICE propagation, Apache-2.0 / MIT) | `pbakaus/impeccable` - `NOTICE.md` | `plugins/frontend/NOTICE.md` (consolidated upstream NOTICE chain: Impeccable -> Anthropic frontend-design + ehmo/typecraft-guide-skill, plus ui-ux-pro-max-skill MIT acknowledgement). The `ehmo/typecraft-guide-skill` lineage is also reflected in the attribution header of `plugins/frontend/skills/frontend-css/references/typography.md`. |
 | `reverse-engineering` | `wshobson/agents` - `plugins/reverse-engineering/` | `plugins/reverse-engineering/agents/*.md` (firmware-analyst, malware-analyst, reverse-engineer), `plugins/reverse-engineering/skills/*/SKILL.md` (anti-reversing-techniques, binary-analysis-patterns, memory-forensics, protocol-reverse-engineering), `plugins/reverse-engineering/skills/anti-reversing-techniques/references/advanced-techniques.md` |
+| `codebase-cleanup` (cherry-pick, MIT) | `wshobson/agents` - `plugins/codebase-cleanup/commands/` | `plugins/codebase-cleanup/commands/deps-audit.md`, `plugins/codebase-cleanup/commands/refactor-clean.md`, `plugins/codebase-cleanup/commands/tech-debt.md`. Upstream `agents/code-reviewer.md` and `agents/test-automator.md` intentionally NOT vendored (heavy overlap with local `senior-review/*` and `testing/*` coverage). Frontmatters rewritten to local style with TRIGGER WHEN / DO NOT TRIGGER WHEN routing notes, emojis stripped from `deps-audit.md`, license-description strings normalized to colon-separated form. |
 
 ### How to sync a plugin
 
@@ -400,6 +401,22 @@ for skill in anti-reversing-techniques binary-analysis-patterns memory-forensics
 done
 gh api "repos/wshobson/agents/contents/plugins/reverse-engineering/skills/anti-reversing-techniques/references/advanced-techniques.md" \
   --jq '.content' | base64 -d
+
+# Fetch latest codebase-cleanup commands from upstream (wshobson/agents example, MIT cherry-pick)
+# Local target: plugins/codebase-cleanup/commands/
+# MIT: preserve the attribution comment immediately after the YAML frontmatter in each file.
+# Skipped intentionally: agents/code-reviewer.md and agents/test-automator.md
+#   (heavy overlap with senior-review/code-auditor + security-auditor + code-review,
+#   and with testing/tdd + python-development/python-tdd; vendoring them would create
+#   duplicate routing).
+# Adaptation on sync: rewrite the upstream single-line `description:` into the local
+# `description: >` multiline form with TRIGGER WHEN / DO NOT TRIGGER WHEN sections,
+# strip emojis from `deps-audit.md`, and normalize license-description strings
+# (`'Copyleft - requires source code disclosure'` -> `'Copyleft: requires source code disclosure'`).
+for cmd in deps-audit refactor-clean tech-debt; do
+  gh api "repos/wshobson/agents/contents/plugins/codebase-cleanup/commands/$cmd.md" \
+    --jq '.content' | base64 -d
+done
 ```
 
 Then compare with the local file, apply upstream changes while preserving local additions (source attribution line at top of each file), bump the plugin version, bump `metadata.version`, and commit + push.

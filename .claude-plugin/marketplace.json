@@ -5,8 +5,8 @@
     "email": ""
   },
   "metadata": {
-    "description": "Claude Code Daodan -- 40 plugins that augment Claude Code into a specialized toolkit. Agents, skills, and commands for code quality, Tauri/Rust development, frontend, AI tooling, scraping, trading, observability, reverse engineering, and constraint programming.",
-    "version": "6.4.0"
+    "description": "Claude Code Daodan -- 41 plugins that augment Claude Code into a specialized toolkit. Agents, skills, and commands for code quality, Tauri/Rust development, frontend, AI tooling, scraping, trading, observability, reverse engineering, and constraint programming.",
+    "version": "6.5.0"
   },
   "plugins": [
     {
@@ -1381,6 +1381,35 @@
         "./skills/anti-reversing-techniques",
         "./skills/memory-forensics",
         "./skills/protocol-reverse-engineering"
+      ]
+    },
+    {
+      "name": "codebase-cleanup",
+      "source": "./plugins/codebase-cleanup",
+      "description": "Technical debt reduction, dependency security auditing, and SOLID-driven refactoring -- three multi-language slash commands: deps-audit (CVE/license/supply-chain scan across npm, pip, gem, maven, go, cargo, composer, nuget), refactor-clean (SOLID refactoring with before/after metrics), and tech-debt (prioritized debt inventory with ROI roadmap).",
+      "version": "1.0.0",
+      "author": {
+        "name": "Seth Hobson"
+      },
+      "license": "MIT",
+      "keywords": [
+        "dependency-audit",
+        "cve-scanning",
+        "license-compliance",
+        "supply-chain-security",
+        "refactoring",
+        "solid-principles",
+        "technical-debt",
+        "tech-debt",
+        "code-quality",
+        "cleanup"
+      ],
+      "category": "review",
+      "strict": false,
+      "commands": [
+        "./commands/deps-audit.md",
+        "./commands/refactor-clean.md",
+        "./commands/tech-debt.md"
       ]
     }
   ]
