@@ -33,7 +33,7 @@ Structural validation of the marketplace ecosystem.
 
 | | |
 |---|---|
-| **Invoke** | Skill reference or `/marketplace-audit` |
+| **Invoke** | Skill reference; closest command is `/marketplace-ops:marketplace-health` for structural JSON validation |
 | **Use for** | Pre-commit validation, detecting orphaned files, frontmatter checks, color harmony |
 
 **Checks:**

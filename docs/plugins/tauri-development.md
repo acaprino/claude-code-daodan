@@ -95,6 +95,8 @@ Unified Tauri 2 development knowledge base covering core, desktop, and mobile pa
 | shell-plugin.md | Child processes, sidecar binaries, scoped commands |
 | build-deploy-desktop.md | .msi, .dmg, .AppImage bundling, code signing, auto-updater |
 | platform-webviews.md | WebView2, WKWebView, WebKitGTK differences |
+| ipc-streaming.md | Channel vs emit benchmarks, rkyv zero-copy, backpressure |
+| high-frequency-ui.md | Streaming and trading UI composition, atomic state, rust-lld |
 
 #### Mobile
 | File | Content |
@@ -102,9 +104,13 @@ Unified Tauri 2 development knowledge base covering core, desktop, and mobile pa
 | setup-mobile.md | Android SDK, Xcode, NDK, mobile HMR |
 | plugins-mobile.md | Biometric, haptics, barcode, NFC, safe areas |
 | testing.md | Emulator, ADB, logcat, WebView debugging |
+| debugging-mobile.md | iOS Web Inspector, Rust backtrace extraction, store crash logs, troubleshooting trees |
 | iap.md | Google Play / App Store in-app purchases |
 | authentication-mobile.md | Deep link OAuth, Apple Sign-In, Firebase callback |
-| build-deploy-mobile.md | APK/IPA builds, keystore, store submission |
+| build-deploy-mobile.md | APK/IPA builds, 16KB page size, NDK trail, Windows-only gotchas |
+| mobile-stale-builds.md | Cargo rerun-if-changed gap that ships stale frontends in APKs, build.rs walk pattern + Gradle safety net |
+| distribution-android.md | Play Console submission, keystore, Play App Signing, common rejections |
+| distribution-ios.md | App Store Connect, certificates and provisioning, Info.plist usage descriptions, TestFlight, App Privacy |
 | ci-cd-mobile.md | Mobile CI/CD: signing, store upload, Fastlane |
 
 ---

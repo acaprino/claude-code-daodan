@@ -123,16 +123,26 @@ Stripe knowledge base -- API patterns, checkout optimization, subscription lifec
 | `api-cheatsheet.md` | Quick API reference |
 | `stripe-patterns.md` | Metered billing, Connect, tax, 3DS, Radar, disputes, idempotency |
 | `checkout-optimization.md` | Conversion optimization patterns |
+| `embedded-checkout.md` | Embedded Checkout integration patterns |
 | `subscription-patterns.md` | Subscription lifecycle + state reconciliation |
 | `pricing-patterns.md` | Tier design, pricing strategy |
 | `cost-analysis.md` | Unit economics |
 | `usage-revenue-modeling.md` | Usage-based revenue models |
+| `billing-meters.md` | Billing Meters product setup and event ingestion |
+| `entitlements.md` | Entitlements product, feature flag mapping, customer access |
+| `webhooks-production.md` | Production webhook hardening checklist |
+| `test-clocks.md` | Test clock workflows for subscription scenario testing |
+| `typescript-nextjs.md` | TypeScript / Next.js integration patterns |
+| `stripe-agent-toolkit.md` | Stripe Agent Toolkit usage for LLM-driven flows |
+| `pci-dss-4-checklist.md` | PCI DSS 4.0 compliance reference |
 | `firebase-integration.md` | Firebase + Firestore integration |
 
 **Scripts** (`skills/stripe/scripts/`, reference via `${CLAUDE_PLUGIN_ROOT}/skills/stripe/scripts/`):
 - `setup_products.py` -- bootstrap Products and Prices
 - `webhook_handler.py` -- signature-verified receiver with idempotency
+- `webhook_audit.py` -- enumerate Stripe-side webhook endpoints and event coverage for `/audit-webhooks`
 - `sync_subscriptions.py` -- reconcile local DB vs Stripe subscription state
+- `simulate_subscription.py` -- drive a subscription through test clock scenarios
 - `stripe_utils.py` -- shared utilities
 
 **Key section:** webhook reliability checklist (signature verification, raw body preservation, idempotency via `event.id`, 10-second 2xx response, replay testing).

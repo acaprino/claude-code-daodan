@@ -83,6 +83,8 @@ Unified web frontend knowledge base -- CSS, UX, UI patterns, layouts, and flows.
 | **Use for** | CSS architecture reference, UX pattern decisions, UI component selection, layout patterns, flow/onboarding patterns |
 
 **References:**
+
+*Modern CSS and UX patterns:*
 | File | Content |
 |------|---------|
 | css-patterns.md | Container Queries, View Transitions, Scroll-driven Animations, architecture patterns |
@@ -91,6 +93,29 @@ Unified web frontend knowledge base -- CSS, UX, UI patterns, layouts, and flows.
 | ui-pattern-guide.md | Cards vs list vs table, navigation, pagination, page archetypes |
 | layout-patterns.md | Holy Grail, Full-Bleed, Split Screen, Bento Grid, Masonry, and more |
 | flow-patterns.md | Step indicators, quiz layouts, coachmarks, paywalls, completeness meters |
+
+*Design fundamentals (Impeccable cherry-pick, Apache-2.0):*
+| File | Content |
+|------|---------|
+| typography.md | Typeface selection, scale, vertical rhythm, optical sizing |
+| color-and-contrast.md | Palette construction, WCAG contrast, semantic color roles |
+| motion-design.md | Easing curves, duration tiers, choreography, reduced motion |
+| heuristics-scoring.md | UX heuristic checklists with weighted scoring |
+| cognitive-load.md | Attention, working memory, decision fatigue, scannability |
+| personas.md | Persona templates and user research synthesis |
+
+*Design system tokens (ui-ux-pro-max cherry-pick, MIT):*
+| File | Content |
+|------|---------|
+| token-architecture.md | Token hierarchy: primitive -> semantic -> component |
+| primitive-tokens.md | Raw color, type, space, radius, motion tokens |
+| semantic-tokens.md | Mapping primitives to roles (surface, text, action, status) |
+| component-tokens.md | Component-level token contracts |
+| component-specs.md | Production-ready component specifications |
+| states-and-variants.md | State and variant matrices per component |
+| tailwind-integration.md | Mapping the token system to a Tailwind config |
+
+**Attribution:** see `plugins/frontend/NOTICE.md` for the full upstream lineage (Impeccable / Anthropic frontend-design / ehmo typecraft / ui-ux-pro-max).
 
 ---
 

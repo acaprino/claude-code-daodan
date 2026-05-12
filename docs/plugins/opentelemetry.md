@@ -31,7 +31,14 @@ Knowledge base for instrumenting Python services with OpenTelemetry -- distribut
 |---|---|
 | **Trigger** | Working with OpenTelemetry, distributed tracing, span instrumentation, context propagation, OTLP exporters, sampling strategies, or observability pipelines |
 
-**Reference documents:** async-context-propagation, instrumentation-patterns, exporters-and-backends, aws-deployment, production-checklist.
+**References:**
+| File | Content |
+|------|---------|
+| async-context-propagation.md | Context propagation across asyncio, AMQP, ZMQ, gRPC transports |
+| instrumentation-patterns.md | Span hygiene, attribute budgets, semantic conventions |
+| exporters-and-backends.md | OTLP exporter config, Jaeger / Tempo / Honeycomb / Datadog tradeoffs |
+| aws-deployment.md | AWS X-Ray + ADOT integration, Lambda quirks |
+| production-checklist.md | Pre-launch readiness gates for production OTel pipelines |
 
 ---
 

@@ -34,7 +34,7 @@ Use the platform-reviewer agent to audit [path or PR]
 
 ### `platform-engineering`
 
-Comprehensive cross-platform development rulebook with 12 reference documents covering security, architecture, and performance.
+Comprehensive cross-platform development rulebook with 13 reference documents covering security, architecture, and performance.
 
 | | |
 |---|---|

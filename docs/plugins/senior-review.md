@@ -205,6 +205,7 @@ Comprehensive defect knowledge base with 16 macro-categories and 140+ subcategor
 **Reference files:**
 - `concurrency-state.md` - Concurrency/parallelism + variable/state errors
 - `logic-types.md` - Comparison/logic + type/conversion errors
+- `logic-integrity.md` - Cross-component logic invariants, contract drift, state machine integrity
 - `memory-resources.md` - Memory management + error handling + performance
 - `security.md` - Security vulnerabilities (14 subcategories)
 - `distributed-integration.md` - API/contract + distributed systems + communication + integration
