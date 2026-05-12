@@ -2,7 +2,7 @@
 
 > Three multi-language slash commands for technical debt reduction: dependency security auditing, SOLID-driven refactoring, and prioritized tech-debt remediation roadmaps. Cherry-picked from `wshobson/agents` and adapted to route around our specialized siblings instead of duplicating them.
 
-**Version:** 1.0.0 (marketplace 6.5.1)
+**Version:** 1.0.0
 
 ## What's inside
 

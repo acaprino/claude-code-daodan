@@ -2,16 +2,16 @@
 
 # Claude Code Daodan
 
-**41 specialized plugins that augment Claude Code into a specialized toolkit -- so you spend less time prompting and more time shipping.**
+**43 specialized plugins that augment Claude Code into a specialized toolkit -- so you spend less time prompting and more time shipping.**
 
 > The Daodan is the symbiote that enhances its host. This marketplace is the Daodan of Claude Code.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue?style=flat)](LICENSE)
-[![Marketplace](https://img.shields.io/badge/marketplace-v6.5.2-green?style=flat)](.claude-plugin/marketplace.json)
-[![Plugins](https://img.shields.io/badge/plugins-41-orange?style=flat)](#plugins)
+[![Marketplace](https://img.shields.io/badge/marketplace-v6.7.1-green?style=flat)](.claude-plugin/marketplace.json)
+[![Plugins](https://img.shields.io/badge/plugins-43-orange?style=flat)](#plugins)
 [![Agents](https://img.shields.io/badge/agents-71-purple?style=flat)](#plugins)
-[![Skills](https://img.shields.io/badge/skills-70-teal?style=flat)](#plugins)
-[![Commands](https://img.shields.io/badge/commands-58-red?style=flat)](#plugins)
+[![Skills](https://img.shields.io/badge/skills-72-teal?style=flat)](#plugins)
+[![Commands](https://img.shields.io/badge/commands-59-red?style=flat)](#plugins)
 
 </div>
 
@@ -97,6 +97,8 @@ That's it. Plugins activate automatically when relevant -- or invoke them direct
 | **[agent-teams](docs/plugins/agent-teams.md)** | Orchestrate multi-agent teams for parallel code review, debugging, codebase mapping, and coordinated feature development | 4 | 6 | 10 |
 | **[reverse-engineering](docs/plugins/reverse-engineering.md)** | Binary reverse engineering, malware analysis, firmware security, protocol research for authorized work | 3 | 4 | - |
 | **[codebase-cleanup](docs/plugins/codebase-cleanup.md)** | Multi-language dependency security audits, SOLID refactoring, prioritized tech-debt roadmaps | - | - | 3 |
+| **[libgdx-development](docs/plugins/libgdx-development.md)** | libGDX cross-platform game dev -- rendering pipeline, Scene2D + Ashley ECS, Box2D, AssetManager, deploy to Desktop/Android/iOS/HTML5, /libgdx-audit | 1 | 1 | 1 |
+| **[kotlin-development](docs/plugins/kotlin-development.md)** | Idiomatic Kotlin -- coroutines, Flow/StateFlow, Kotlin Multiplatform (KMP), Jetpack Compose, Ktor server, type-safe DSLs | - | 1 | - |
 
 **A** = Agents, **S** = Skills, **C** = Commands
 
@@ -130,7 +132,7 @@ claude-code-daodan/
 │   │   └── commands/          # slash-command .md files
 │   ├── senior-review/
 │   ├── frontend/
-│   └── ...                    # 41 plugins total
+│   └── ...                    # 43 plugins total
 ├── LICENSE
 └── README.md
 ```

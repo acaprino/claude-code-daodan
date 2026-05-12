@@ -27,6 +27,8 @@ The augmentation symbiote for Claude Code. Agents, skills, and commands for deve
 | [git-worktrees](plugins/git-worktrees.md) | development-tools | Git worktree management -- create, pause, resume, merge parallel branches | 1 agent, 1 skill, 1 command |
 | [grabber-development](plugins/grabber-development.md) | development | Expert Python web scraping: stealth browsers, TLS impersonation, anti-bot bypass, proxy architecture, AI extraction | 4 agents, 1 skill |
 | [ibkr-trading](plugins/ibkr-trading.md) | algotrading | Interactive Brokers algotrading -- TWS API, ib_async, order execution | 1 agent, 1 skill, 1 command |
+| [kotlin-development](plugins/kotlin-development.md) | development | Idiomatic Kotlin -- coroutines, Flow/StateFlow, Kotlin Multiplatform (KMP), Jetpack Compose, Ktor server, type-safe DSLs | 1 skill |
+| [libgdx-development](plugins/libgdx-development.md) | development | libGDX cross-platform game dev -- rendering pipeline, Scene2D + Ashley ECS, Box2D, AssetManager, Desktop/Android/iOS/HTML5 deploy, /libgdx-audit | 1 agent, 1 skill, 1 command |
 | [learning](plugins/learning.md) | productivity | Mind maps, Obsidian MarkMind export, interactive force-graph visualization | 3 skills, 1 command |
 | [marketplace-ops](plugins/marketplace-ops.md) | utilities | Plugin management -- auditing, validation, upstream sync, scaffolding | 1 agent, 2 skills, 4 commands |
 | [messaging](plugins/messaging.md) | infrastructure | RabbitMQ and AMQP -- queue design, clustering, high availability | 1 agent |

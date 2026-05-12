@@ -6,7 +6,7 @@
 
 | Need | Tool | What it does |
 |------|------|------|
-| "What should we build?" | `/frontend:frontend-strategy` | Strategy and planning |
+| "What should we build?" | `frontend-strategy` skill | Strategy and planning |
 | "Build it from scratch" | `/agent-teams:team-design` | Orchestrates frontend agents |
 | "Improve what exists" | `/agent-teams:team-design` | Audits and redesigns existing code |
 | "Optimize React perf" | [react-development](react-development.md) | React 19 performance |
@@ -125,7 +125,7 @@ Strategic website planning skill for the discovery phase before writing any code
 
 | | |
 |---|---|
-| **Invoke** | `/frontend:frontend-strategy` |
+| **Invoke** | Skill reference (auto-activates on website/redesign planning prompts) |
 | **Use for** | Planning a new website or redesign -- website brief, sitemap, design direction, content strategy |
 
 ---
