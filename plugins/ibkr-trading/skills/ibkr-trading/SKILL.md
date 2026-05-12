@@ -4,7 +4,7 @@ description: >
   Comprehensive Interactive Brokers algotrading knowledge base covering TWS API 10.44 architecture,
   ib_async event-driven programming, market data subscriptions, order execution with bracket orders,
   historical data with pacing rules, reconnection resilience, IBC automation, and Windows production deployment.
-  TRIGGER WHEN: building, optimizing, or debugging IB trading systems with Python.
+  TRIGGER WHEN: building, implementing, writing, coding, creating, optimizing, or debugging IB trading systems with Python.
   DO NOT TRIGGER WHEN: the task is outside the specific scope of this component.
 ---
 

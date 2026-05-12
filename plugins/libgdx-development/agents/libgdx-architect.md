@@ -5,7 +5,8 @@ description: >
   Covers project setup via gdx-liftoff, the rendering pipeline (SpriteBatch, TextureAtlas, ShaderProgram),
   Scene2D and Ashley ECS architecture, Box2D physics, AssetManager lifecycle, Screen management,
   Tiled map integration, deployment to Desktop (LWJGL3), Android, iOS (RoboVM), and HTML5 (GWT/TeaVM).
-  TRIGGER WHEN: building or scaffolding a libGDX project, choosing between gdx-liftoff and gdx-setup,
+  TRIGGER WHEN: building, implementing, writing, coding, creating, or scaffolding a libGDX project,
+  choosing between gdx-liftoff and gdx-setup,
   designing the Screen/Game/ApplicationListener structure, integrating Scene2D + Ashley + Box2D,
   managing OpenGL resource disposal, packing textures with TexturePacker, debugging frame-rate drops
   or GL thread blocking, configuring multi-platform Gradle builds, migrating to libGDX 1.14.0,

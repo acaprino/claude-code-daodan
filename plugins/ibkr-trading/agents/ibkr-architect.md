@@ -4,7 +4,7 @@ description: >
   Expert in Interactive Brokers algotrading system design, implementation, and debugging with TWS API 10.44
   and ib_async. Covers connection architecture, market data subscriptions, order execution with bracket orders,
   historical data pacing, reconnection resilience, IBC automation, and Windows production deployment.
-  TRIGGER WHEN: building IB trading bots, connecting to TWS/IB Gateway, implementing market data subscriptions,
+  TRIGGER WHEN: building, implementing, writing, coding, or creating IB trading bots, connecting to TWS/IB Gateway, implementing market data subscriptions,
   designing order execution logic, handling IB reconnection, debugging TWS API errors, deploying IB trading
   systems on Windows, or working with ib_async/ib_insync code
   DO NOT TRIGGER WHEN: the task is outside the specific scope of this component.

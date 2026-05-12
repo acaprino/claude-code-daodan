@@ -2,7 +2,7 @@
 name: frontend-engineer
 description: >
   Hands-on frontend engineer for building components, pages, and applications. Designs architecture (component tree, state management, layout strategy) and implements directly. Modern CSS, React, responsive design, accessibility.
-  TRIGGER WHEN: the user wants to build a new frontend feature, component, or application, or requests a frontend architecture plan.
+  TRIGGER WHEN: the user wants to build, implement, write, code, or create a new frontend feature, component, or application, or requests a frontend architecture plan.
   DO NOT TRIGGER WHEN: the user is asking for a simple CSS fix or a highly specific bug fix that a specialized agent can handle directly.
 tools: Read, Write, Edit, Bash, Glob
 model: opus

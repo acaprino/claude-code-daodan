@@ -6,8 +6,8 @@ description: >
   AssetManager lifecycle, Screen management, Tiled map integration, and multi-platform deployment
   to Desktop (LWJGL3), Android, iOS (RoboVM), and HTML5 (GWT/TeaVM). Includes libGDX 1.14.0
   breaking changes and Kotlin compatibility caveats.
-  TRIGGER WHEN: building, optimizing, or debugging libGDX games; scaffolding new libGDX projects;
-  migrating libGDX versions; choosing libGDX architecture patterns.
+  TRIGGER WHEN: building, implementing, writing, coding, creating, optimizing, or debugging libGDX games;
+  scaffolding or starting new libGDX projects; migrating libGDX versions; choosing libGDX architecture patterns.
   DO NOT TRIGGER WHEN: the task is general Java/Kotlin work unrelated to libGDX, or the engine is
   not libGDX (jMonkey, KorGE, Godot, Unity).
 ---

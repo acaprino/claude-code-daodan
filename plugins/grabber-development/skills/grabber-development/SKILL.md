@@ -5,7 +5,7 @@ description: >
   TLS/HTTP fingerprint impersonation (curl_cffi, primp), anti-bot bypass (Cloudflare, DataDome, PerimeterX),
   CAPTCHA solving, proxy architecture, AI-assisted extraction (Crawl4AI, Firecrawl, ScrapeGraphAI),
   framework selection (Scrapy, Crawlee), rate limiting, and production observability.
-  TRIGGER WHEN: building, optimizing, or debugging Python web scrapers.
+  TRIGGER WHEN: building, implementing, writing, coding, creating, optimizing, or debugging Python web scrapers.
   DO NOT TRIGGER WHEN: the task is outside the specific scope of this component.
 ---
 
