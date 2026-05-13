@@ -149,6 +149,27 @@ claude plugin install ./claude-code-daodan/plugins/python-development
 
 </details>
 
+<details>
+<summary><b>Recommended Settings (skill visibility)</b></summary>
+
+With 43 plugins installed, Claude Code's default skill-listing budget can truncate the list of available skills shown at conversation start. Raise the fraction of context allocated to the skill listing in `~/.claude/settings.json`:
+
+```json
+{
+  "skillListingBudgetFraction": 0.15
+}
+```
+
+Guideline values:
+
+- `0.15` -- moderate bump, recommended starting point
+- `0.25` -- high, useful if you keep most plugins enabled
+- `0.40` -- maximum visibility, reduces tokens available to the conversation
+
+Restart Claude Code (or open a new session) after editing.
+
+</details>
+
 ---
 
 ## Contributing
