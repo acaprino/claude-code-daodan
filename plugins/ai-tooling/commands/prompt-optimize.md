@@ -36,6 +36,14 @@ Task:
     Clarity, Specificity, Structure, Token Efficiency, Robustness, Output Control.
     Identify ambiguities, missing edge cases, structural weaknesses, and injection vulnerabilities.
 
+    Reasoning-pattern check: decide whether the task would benefit from a structured
+    reasoning scaffold beyond plain instructions (CoT, Step-Back, ReAct, Tree-of-Thought,
+    Self-Consistency, Reflexion, Plan-and-Solve, Least-to-Most, Self-Ask, Skeleton-of-Thought).
+    If yes, read `plugins/ai-tooling/references/reasoning-patterns.md`, pick the pattern
+    that matches the task shape using the selection cheat sheet, and apply it in Phase 2.
+    If the existing prompt already scores 4+ on every dimension, do not add a pattern just
+    for completeness -- record the decision in the analysis instead.
+
     ## Phase 2: Output (outside tags)
     Based on your analysis, respond strictly in this format:
 
@@ -57,6 +65,7 @@ Task:
 
     ### Key Changes & Impact
     - **Word count**: [original] -> [optimized] words
+    - **Reasoning pattern applied**: [pattern name from reasoning-patterns.md, or "none -- not warranted"]
     - [Bullet points explaining the 3 most impactful structural changes and why]
 
     If --optimize-for is:
