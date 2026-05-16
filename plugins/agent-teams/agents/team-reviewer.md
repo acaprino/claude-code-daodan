@@ -5,7 +5,7 @@ description: >
   (security, performance, architecture, testing, or accessibility) with structured
   finding format. Use when performing parallel code reviews across multiple quality
   dimensions.
-tools: Read, Glob, Grep, Bash
+tools: Read, Write, Glob, Grep, Bash
 model: opus
 color: green
 ---
@@ -129,3 +129,7 @@ Load these skills to enhance review depth:
 - Prioritizes findings by impact and likelihood
 - Avoids false positives by verifying context before reporting
 - Reports "no findings" dimensions honestly rather than inflating results
+
+## Output Persistence
+
+When you are spawned by a pipeline command (for example `/agent-teams:team-review`) that gives you an output file path in the prompt, write your final report to that path using the `Write` tool. Do not return the report only as message text. The orchestrator relies on the file being on disk for consolidation. If no path is provided, return the report inline as usual.

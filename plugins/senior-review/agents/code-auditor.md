@@ -249,3 +249,7 @@ Apply mental models before scoring:
 - Do NOT flag theoretical issues without a concrete scenario showing the steps
 - Do NOT conflate "bad style" with "failure risk" -- focus on real bugs
 - Do NOT assume external inputs are stable between runs
+
+## Output Persistence
+
+When you are spawned by a pipeline command (for example `/agent-teams:team-review`) that gives you an output file path in the prompt, write your final report to that path using the `Write` tool. Do not return the report only as message text. The orchestrator relies on the file being on disk for consolidation. If no path is provided, return the report inline as usual.

@@ -281,3 +281,7 @@ For each service boundary, check defensive patterns.
 - Do NOT duplicate findings from security-auditor. Auth bypass at service boundaries is yours; SQL injection within a service is theirs.
 - Do NOT limit analysis to one direction. If A calls B, also check: does B validate A's input? Does A handle B's error responses? Does A's retry interact with B's idempotency?
 - Do NOT claim "everything is fine" without evidence. Show the contract pairs you compared, the timeout values you extracted, the saga steps you traced.
+
+## Output Persistence
+
+When you are spawned by a pipeline command (for example `/agent-teams:team-review`) that gives you an output file path in the prompt, write your final report to that path using the `Write` tool. Do not return the report only as message text. The orchestrator relies on the file being on disk for consolidation. If no path is provided, return the report inline as usual.

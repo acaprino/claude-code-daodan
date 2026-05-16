@@ -264,3 +264,7 @@ Find dependencies that work only because of timing coincidence.
 - Do NOT suggest removing all inter-service dependencies. The goal is to break CYCLES and make ordering EXPLICIT, not to eliminate dependencies entirely.
 - Do NOT assume retry-on-startup is always bad. It is a valid pattern when the dependency is guaranteed to eventually become available. Flag it only when it masks a true cycle or when there is no guarantee the dependency will resolve.
 - Do NOT duplicate findings from distributed-flow-auditor. Runtime contract mismatches, timeout chains, and saga issues are theirs. Startup ordering and initialization cycles are yours.
+
+## Output Persistence
+
+When you are spawned by a pipeline command (for example `/agent-teams:team-review`) that gives you an output file path in the prompt, write your final report to that path using the `Write` tool. Do not return the report only as message text. The orchestrator relies on the file being on disk for consolidation. If no path is provided, return the report inline as usual.

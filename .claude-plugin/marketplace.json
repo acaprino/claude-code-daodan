@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "Claude Code Daodan -- 43 plugins that augment Claude Code into a specialized toolkit. Agents, skills, and commands for code quality, Tauri/Rust development, frontend, AI tooling, scraping, trading, observability, reverse engineering, constraint programming, libGDX game development, and Kotlin (coroutines, KMP, Compose, Ktor).",
-    "version": "6.8.0"
+    "version": "6.8.1"
   },
   "plugins": [
     {
@@ -143,7 +143,7 @@
       "name": "react-development",
       "source": "./plugins/react-development",
       "description": "React performance optimization, React 19 API adoption, state management audit, bundle analysis, re-render detection, and Vercel best practices checklist",
-      "version": "1.9.2",
+      "version": "1.9.3",
       "author": {
         "name": "Alfio"
       },
@@ -622,7 +622,7 @@
       "name": "senior-review",
       "source": "./plugins/senior-review",
       "description": "Multi-agent code review orchestration with unified code auditing (architecture, failure flow, pattern analysis, scoring), security auditing, UI race condition detection, distributed flow analysis, platform engineering review, codebase-hygiene auditing (dead code + orphan assets + generated artifacts in VCS + phantom/unused deps + barrel-file and eager-bundle bloat), /cleanup-dead-code incremental-phase command with commit-per-category and build+test gates, semantic interconnect mapping (contracts / invariants / domain rules / assumptions) reusable across team-review and codebase-mapper, logic-integrity auditing for cross-component contract violations, git blame/history analysis, finding validation with false-positive filtering, committable PR suggestions, pre-review skip logic, intent-driven review, confidence gating, cross-agent deduplication, pre-existing issue separation, verdict system, interactive fix loop, and conditional reviewers for testing quality, API contracts, and data migrations. Backed by a comprehensive defect taxonomy knowledge base (140+ defect patterns, CWE/OWASP mappings, plus a dedicated logic-integrity reference).",
-      "version": "5.6.0",
+      "version": "5.6.1",
       "author": {
         "name": "Alfio"
       },
@@ -1100,7 +1100,7 @@
       "name": "platform-engineering",
       "source": "./plugins/platform-engineering",
       "description": "Cross-platform development rulebook -- security (validation, auth tokens, passkeys/WebAuthn, API security, XSS/CSP, secrets), architecture (client-server, REST vs GraphQL, offline-first, monolith-first, CI/CD), and performance (bundles, images, Core Web Vitals, SSR/SSG, CDN caching) for SPA, PWA, mobile, Electron (with Fuses + asar integrity), and Tauri; includes /platform-review standalone command",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "author": {
         "name": "Alfio"
       },
@@ -1388,7 +1388,7 @@
       "name": "agent-teams",
       "source": "./plugins/agent-teams",
       "description": "Orchestrate multi-agent teams for parallel code review, hypothesis-driven debugging, and coordinated feature development using Claude Code Agent Teams. Includes the team-review pipeline (deep-dive + interconnect map + parallel reviewers + codebase-hygiene auditor + consolidation) for finding cross-component logic bugs plus dead code / orphan assets / VCS cruft / phantom deps, and the team-codebase-map pipeline (context brief + interconnect map + parallel writers + drift-aware review) for producing accurate codebase documentation.",
-      "version": "2.9.3",
+      "version": "2.9.4",
       "author": {
         "name": "Seth Hobson"
       },

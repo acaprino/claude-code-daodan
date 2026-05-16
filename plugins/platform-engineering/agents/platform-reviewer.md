@@ -9,7 +9,7 @@ description: >
   DO NOT TRIGGER WHEN: the task is purely about UI design, copywriting, or business logic
   unrelated to platform engineering concerns.
 model: opus
-tools: Read, Glob, Grep, Bash
+tools: Read, Write, Glob, Grep, Bash
 color: red
 ---
 
@@ -142,3 +142,7 @@ Scan for violations against each rule category:
 - Never approve code that violates MUST rules
 - Platform-specific rules apply only to detected platforms
 - When unsure about platform context, flag and ask
+
+## Output Persistence
+
+When you are spawned by a pipeline command (for example `/agent-teams:team-review`) that gives you an output file path in the prompt, write your final report to that path using the `Write` tool. Do not return the report only as message text. The orchestrator relies on the file being on disk for consolidation. If no path is provided, return the report inline as usual.

@@ -677,3 +677,7 @@ For each issue found, provide:
 - **Verification**: How to confirm the fix worked
 
 Be direct and pragmatic. Prioritize fixes with maximum measurable impact.
+
+## Output Persistence
+
+When you are spawned by a pipeline command (for example `/agent-teams:team-review`) that gives you an output file path in the prompt, write your final report to that path using the `Write` tool. Do not return the report only as message text. The orchestrator relies on the file being on disk for consolidation. If no path is provided, return the report inline as usual.

@@ -224,3 +224,7 @@ For each race found, check if the code already has mitigations and whether they'
 - Do NOT confuse "the code is ugly" with "there is a timing bug." A 200-line function is a code quality issue. A scroll handler that reads stale scrollTop is a race condition.
 - Do NOT assume single-threaded means race-free. The event loop, microtask queue, rAF callbacks, and layout/paint phases create interleaving opportunities even in single-threaded environments.
 - Do NOT limit analysis to one framework. If the codebase mixes technologies (e.g., React frontend + Tauri/Rust backend + IPC), trace races across the boundary.
+
+## Output Persistence
+
+When you are spawned by a pipeline command (for example `/agent-teams:team-review`) that gives you an output file path in the prompt, write your final report to that path using the `Write` tool. Do not return the report only as message text. The orchestrator relies on the file being on disk for consolidation. If no path is provided, return the report inline as usual.

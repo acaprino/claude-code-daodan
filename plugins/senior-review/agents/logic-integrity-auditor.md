@@ -200,3 +200,7 @@ Do NOT pad findings to reach a quota. 0 findings on a clean codebase is a valid 
 - Do NOT re-flag findings already owned by other reviewers (see deconfliction table).
 - Do NOT read the full target codebase if the map did not flag an anchor. Your job is to verify specific concerns, not rediscover the whole system.
 - Do NOT produce findings without `file:line` citations in BOTH the map anchor AND the code.
+
+## Output Persistence
+
+When you are spawned by a pipeline command (for example `/agent-teams:team-review`) that gives you an output file path in the prompt, write your final report to that path using the `Write` tool. Do not return the report only as message text. The orchestrator relies on the file being on disk for consolidation. If no path is provided, return the report inline as usual.

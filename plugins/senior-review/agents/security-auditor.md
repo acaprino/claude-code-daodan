@@ -151,3 +151,7 @@ Rationale: 2-3 sentences justifying the score.
 - Do not give generic security advice ("always validate input") -- point to specific lines
 - Do not soften findings with "this is low risk in practice"
 - Do not skip dependency analysis -- check for known vulnerable patterns
+
+## Output Persistence
+
+When you are spawned by a pipeline command (for example `/agent-teams:team-review`) that gives you an output file path in the prompt, write your final report to that path using the `Write` tool. Do not return the report only as message text. The orchestrator relies on the file being on disk for consolidation. If no path is provided, return the report inline as usual.

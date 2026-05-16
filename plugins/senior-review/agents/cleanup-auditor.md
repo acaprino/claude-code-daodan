@@ -6,7 +6,7 @@ description: >
   DO NOT TRIGGER WHEN: the user wants to actually REMOVE the detected issues (use /senior-review:cleanup-dead-code), review architecture/security/performance (use code-auditor / security-auditor), or do language-only dead-code (use typescript-development:knip or python-development:python-dead-code skills directly).
 model: opus
 color: yellow
-tools: Read, Glob, Grep, Bash
+tools: Read, Write, Glob, Grep, Bash
 ---
 
 # Cleanup Auditor
@@ -226,3 +226,7 @@ Run `/senior-review:cleanup-dead-code` with these phases in order (one commit pe
 - Do NOT conflate unused devDependencies with unused runtime deps. Separate the categories.
 - Do NOT invent severity. A 3 KB orphan SVG is not CRITICAL.
 - Do NOT recommend `.gitignore` entries for files the repo already doesn't have.
+
+## Output Persistence
+
+When you are spawned by a pipeline command (for example `/agent-teams:team-review`) that gives you an output file path in the prompt, write your final report to that path using the `Write` tool. Do not return the report only as message text. The orchestrator relies on the file being on disk for consolidation. If no path is provided, return the report inline as usual.
