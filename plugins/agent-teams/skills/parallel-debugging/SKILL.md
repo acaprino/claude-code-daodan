@@ -5,7 +5,7 @@ description: >
   evidence collection, and root cause arbitration. Use this skill when debugging
   bugs with multiple potential causes, performing root cause analysis, or
   organizing parallel investigation workflows.
-version: 1.0.2
+version: 1.1.0
 ---
 
 # Parallel Debugging
@@ -135,3 +135,28 @@ Before declaring the bug fixed:
 - [ ] Original reproduction case no longer fails
 - [ ] Related edge cases are covered
 - [ ] Relevant tests are added or updated
+
+## Specialized Investigation Agents
+
+When a hypothesis falls into one of the 6 failure mode categories above, prefer a specialized investigator over a generic `team-debugger`. The specialized agent loads the right knowledge base automatically and produces higher-precision findings.
+
+| Failure mode category | Preferred specialized agent | Notes |
+|---|---|---|
+| Logic Error | `senior-review:code-auditor` | Failure-flow tracing + pattern consistency |
+| Data Issue | `senior-review:code-auditor` or `senior-review:security-auditor` | The latter when the data crosses a trust boundary |
+| State Problem (concurrency, cache, mutation) | `senior-review:ui-race-auditor` for UI; `senior-review:distributed-flow-auditor` for cross-service | |
+| Integration Failure | `senior-review:distributed-flow-auditor` | Both sides of the contract |
+| Resource Issue | `senior-review:code-auditor` + `react-development:react-performance-optimizer` (if frontend) | |
+| Environment | `senior-review:chicken-egg-detector` | Startup cycles, init order, config bootstrap |
+
+`team-debugger` remains the fallback when no specialized agent matches the hypothesis cleanly, or when the investigation is too cross-cutting for a single specialist.
+
+## Sub-spawning caveat
+
+When a `team-debugger` spawns a specialized sub-agent via the `Agent` tool (e.g. to deepen one of the 6 categories), that sub-agent itself **cannot** spawn further sub-agents (Claude Agent SDK restriction: one-level subagent nesting). If a hypothesis requires deeper delegation, the debugger reports this to the team lead rather than chaining indirectly; the lead has the team-level view to decide whether to re-spawn at the top level or escalate to the user.
+
+## Output Persistence
+
+The `team-debugger` agent and the specialized investigators all accept a spawner-provided output file path. When the orchestrator spawns an investigator and wants the structured report on disk (the default in `/team-review` and similar pipelines), the spawn prompt must include `Write your final report to <path>`. Investigators write directly with the `Write` tool rather than returning the report only as message text.
+
+Reference: `docs/references/agent-teams-best-practices.md` § Operational do's and don'ts.

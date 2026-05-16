@@ -5,7 +5,7 @@ description: >
   work with proper task descriptions and workload balancing. Use this skill when
   breaking down work for agent teams, managing task dependencies, or monitoring
   team progress.
-version: 1.0.2
+version: 1.1.0
 ---
 
 # Task Coordination Strategies
@@ -31,7 +31,9 @@ Split work by architectural layer:
 - Database migrations/models
 - Test suites
 
-**Best for**: Full-stack features, vertical slices
+**Best for**: Full-stack features, vertical slices.
+
+**Caveat**: "By Layer" is a form of problem-centric decomposition (planner / coder / tester roles in disguise). It works when the layers genuinely have isolable contexts; it fails when teammates end up handing context back and forth at every layer boundary. Default to **By File Ownership** or **By Component** when context can be cleanly partitioned. Use "By Layer" only when context isolation per layer is real, not aspirational. Reference: `docs/references/agent-teams-best-practices.md` § When to use a team.
 
 ### By Component
 
@@ -110,11 +112,13 @@ TaskUpdate: { taskId: "3", addBlockedBy: ["1", "2"] }  -> #3 waits for #1 and #2
 Every task should include:
 
 1. **Objective** -- What needs to be accomplished (1-2 sentences)
-2. **Owned Files** -- Explicit list of files/directories this teammate may modify
+2. **Owned Files** -- Explicit list of files/directories this teammate may modify (load-bearing: the team-lead Prime Directive mandates this in every spawn prompt)
 3. **Requirements** -- Specific deliverables or behaviors expected
 4. **Interface Contracts** -- How this work connects to other teammates' work
-5. **Acceptance Criteria** -- How to verify the task is done correctly
-6. **Scope Boundaries** -- What is explicitly out of scope
+5. **Output Path** (for artifact-producing tasks) -- Where the teammate must write its final report or deliverable. Required for reviewer / debugger / researcher roles; omitted only when the teammate edits code directly with no separate report.
+6. **Acceptance Criteria** -- How to verify the task is done correctly
+7. **Scope Boundaries** -- What is explicitly out of scope
+8. **Completion Protocol** -- For example: "When done, call `TaskUpdate(completed)` BEFORE messaging the lead." Tasks left in `in_progress` block dependent work.
 
 ### Template
 
@@ -165,3 +169,13 @@ Build the user authentication API endpoints.
 3. Use `TaskUpdate` to reassign tasks
 4. Use `SendMessage` to notify affected teammates
 5. Monitor for improved throughput
+
+## Quality Gates via Hooks
+
+To enforce rules at task-level boundaries without babysitting, wire the native team hooks:
+
+- `TaskCreated` -- exit code 2 blocks task creation. Use to enforce that every task description includes ownership and acceptance criteria.
+- `TaskCompleted` -- exit code 2 blocks completion. Use to gate lint / type-check / test before a task closes.
+- `TeammateIdle` -- exit code 2 returns the teammate to work with feedback. Use when a teammate marks itself idle but the work is not actually finished.
+
+Hooks turn "trust and hope" into "trust and verify" without inflating spawn prompts. Reference: `docs/references/agent-teams-best-practices.md` § Hooks for quality gates.

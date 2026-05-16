@@ -9,7 +9,7 @@ description: >
   iTerm2, in-process) for a CI or local environment, or when building a custom
   team composition for a non-standard workflow such as a migration or security
   audit.
-version: 1.0.2
+version: 1.1.0
 ---
 
 # Team Composition Patterns
@@ -35,14 +35,38 @@ Best practices for composing multi-agent teams, selecting team sizes, choosing a
 
 **Rule of thumb**: Start with the smallest team that covers all required dimensions. Adding teammates increases coordination overhead.
 
+### Token cost multiplier
+
+A team costs **3-10x the tokens of a single Claude** (typical ~7x for plan-mode workflows). Each teammate runs in its own context window and consumes tokens independently. Drivers of cost:
+
+- Number of teammates (linear).
+- Token budget per teammate (linear in exploration depth).
+- Duration of unsupervised exploration (the largest variance source; unbounded scope explodes here).
+
+Cheap-team recipe: Opus lead + Sonnet teammates, 2-3 teammates, scope-bounded spawn prompts, Haiku for any role where summarization is the main job. Cost killers: unbounded scope, no file ownership (forces rework), no task dependencies (forces rework on unstable foundations), no `TaskCompleted` quality gates (forces rework on broken code).
+
+### Hard limits (as of 2026-05)
+
+These are enforced by the harness and cannot be worked around with prompt engineering:
+
+- **One team per lead.** A lead can only manage one team at a time. Clean up before creating the next.
+- **No nested teams.** Teammates cannot spawn their own teams or further teammates.
+- **No nested subagents.** A teammate spawned with `Agent` cannot itself call `Agent` to spawn a sub-subagent.
+- **Lead is fixed for the team's lifetime.** No promotion, no leadership transfer.
+- **Permissions set at spawn.** Per-teammate at spawn time is not supported.
+- **No session resumption for in-process teammates.** `/resume` and `/rewind` do not restore them.
+- **Broadcast removed.** Send one `message` per recipient by name.
+
+Reference: `docs/references/agent-teams-best-practices.md` § Hard limits.
+
 ## Preset Team Compositions
 
 ### Review Team
 
 - **Size**: 3 reviewers
-- **Agents**: 3x `team-reviewer`
-- **Default dimensions**: security, performance, architecture
-- **Use when**: Code changes need multi-dimensional quality assessment
+- **Agents**: prefer specialized `senior-review:security-auditor` + `senior-review:code-auditor` + a third dimension matching the diff (e.g. `senior-review:ui-race-auditor` for frontend changes, `senior-review:distributed-flow-auditor` for cross-service changes). Fall back to `agent-teams:team-reviewer` only when no specialized agent fits the dimension.
+- **Default dimensions**: security, code quality (architecture + patterns + scoring), and one context-driven dimension
+- **Use when**: Code changes need multi-dimensional quality assessment. For pipeline reviews driven by `/team-review`, the command auto-selects specialized agents based on the diff and adds Phase 1 context (deep-dive + interconnect map) automatically.
 
 ### Debug Team
 
@@ -74,9 +98,9 @@ Best practices for composing multi-agent teams, selecting team sizes, choosing a
 ### Security Team
 
 - **Size**: 4 reviewers
-- **Agents**: 4x `team-reviewer`
-- **Default dimensions**: OWASP/vulnerabilities, auth/access control, dependencies/supply chain, secrets/configuration
-- **Use when**: Comprehensive security audit covering multiple attack surfaces
+- **Agents**: prefer `senior-review:security-auditor` for OWASP / auth / secrets, `platform-engineering:platform-reviewer` for client-side hardening (CSP, token storage, secrets in bundles), `senior-review:distributed-flow-auditor` for cross-service auth flows, and `codebase-cleanup:deps-audit` (or `senior-review:cleanup-auditor`) for dependencies / supply chain. Fall back to `agent-teams:team-reviewer` only if a dimension has no specialized agent.
+- **Default dimensions**: OWASP / vulnerabilities, platform / client-side security, cross-service auth, dependencies / supply chain
+- **Use when**: Comprehensive security audit covering multiple attack surfaces.
 
 ### Migration Team
 
@@ -143,9 +167,11 @@ Configure in `~/.claude/settings.json`:
 
 | Mode           | Behavior                       | Best For                                          |
 | -------------- | ------------------------------ | ------------------------------------------------- |
-| `"tmux"`       | Each teammate in a tmux pane   | Development workflows, monitoring multiple agents |
-| `"iterm2"`     | Each teammate in an iTerm2 tab | macOS users who prefer iTerm2                     |
-| `"in-process"` | All teammates in same process  | Simple tasks, CI/CD environments                  |
+| `"tmux"`       | Split panes (auto-detects tmux or iTerm2's `it2` CLI) | Development workflows, monitoring multiple agents |
+| `"in-process"` | All teammates in main terminal, Shift+Down to cycle | Simple tasks, CI/CD environments, any terminal without tmux |
+| `"auto"` (default) | Split panes if already in tmux, otherwise in-process | Most users; no manual choice needed |
+
+Note: `"iterm2"` is not a separate setting. Split-pane mode uses tmux first and falls back to iTerm2's `it2` CLI automatically. VS Code's integrated terminal, Windows Terminal, and Ghostty do not support split panes -- they always use in-process mode.
 
 ## Custom Team Guidelines
 

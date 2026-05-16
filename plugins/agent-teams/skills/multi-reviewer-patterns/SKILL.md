@@ -5,7 +5,7 @@ description: >
   deduplication, severity calibration, and consolidated reporting. Use this skill
   when organizing multi-reviewer code reviews, calibrating finding severity, or
   consolidating review results.
-version: 1.1.0
+version: 1.2.0
 ---
 
 # Multi-Reviewer Patterns
@@ -111,6 +111,17 @@ When the pipeline is skipped, reviewers receive only target + diff. In this mode
 - `logic-integrity-auditor` is not spawned (no map to drive it).
 - All other reviewers fall back to their pre-pipeline behavior.
 - No `.deep-dive/` or `.team-review/02-interconnect.md` references should appear in reviewer prompts.
+
+## Pipeline Conventions (per reviewer)
+
+Every reviewer agent that runs as part of `/team-review` Phase 2 carries a `## Pipeline Conventions` section in its system prompt with four cross-cutting rules. The orchestrator does not need to repeat them in the spawn prompt, but should be aware of what they mandate:
+
+- **Scope budget**: each reviewer stops after ~15 file reads without a finding and returns a "scope-off-topic" report. The orchestrator should plan targets at a granularity that respects this budget.
+- **No-findings protocol**: reviewers may legitimately return "examined X, Y, Z -- no issues" instead of inventing findings. Treat such reports as valid Phase 3 input, not failure.
+- **Cross-Reviewer Notes**: reviewers append observations that belong to other dimensions in a `## Cross-Reviewer Notes` section. Phase 3 consolidation must scan for this section and route the observations to the appropriate reviewer (or surface them in the consolidated report under the recipient dimension).
+- **Interconnect anchor citation**: reviewers cite map anchors when applicable. This is the same signal as the context utilization rate above; the section below quantifies the quality metric.
+
+Reference: `docs/references/agent-teams-best-practices.md` § Pipeline Conventions.
 
 ## Finding Deduplication
 
