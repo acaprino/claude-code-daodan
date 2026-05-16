@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "Claude Code Daodan -- 43 plugins that augment Claude Code into a specialized toolkit. Agents, skills, and commands for code quality, Tauri/Rust development, frontend, AI tooling, scraping, trading, observability, reverse engineering, constraint programming, libGDX game development, and Kotlin (coroutines, KMP, Compose, Ktor).",
-    "version": "6.8.2"
+    "version": "6.8.3"
   },
   "plugins": [
     {
@@ -1388,7 +1388,7 @@
       "name": "agent-teams",
       "source": "./plugins/agent-teams",
       "description": "Orchestrate multi-agent teams for parallel code review, hypothesis-driven debugging, and coordinated feature development using Claude Code Agent Teams. Includes the team-review pipeline (deep-dive + interconnect map + parallel reviewers + codebase-hygiene auditor + consolidation) for finding cross-component logic bugs plus dead code / orphan assets / VCS cruft / phantom deps, and the team-codebase-map pipeline (context brief + interconnect map + parallel writers + drift-aware review) for producing accurate codebase documentation.",
-      "version": "2.9.4",
+      "version": "2.10.0",
       "author": {
         "name": "Seth Hobson"
       },

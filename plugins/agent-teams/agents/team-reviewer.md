@@ -73,6 +73,10 @@ Perform deep, focused code review on your assigned dimension. Produce findings i
 - Alternative text for media
 - Responsive design and zoom support
 
+## Scope Budget
+
+If after ~15 file reads you have not surfaced a finding in your assigned dimension, the scope is too broad or the dimension is not relevant to this target. Stop, output a "no findings -- scope appears off-topic for this dimension" report, and return. Do not invent findings to fill space.
+
 ## Output Format
 
 For each finding, use this structure:
@@ -93,6 +97,10 @@ What could go wrong if this is not addressed.
 **Recommended Fix**:
 Specific, actionable remediation with code example if applicable.
 ```
+
+### Cross-Reviewer Notes (optional)
+
+If during analysis you spot an issue clearly belonging to another reviewer's dimension, list it in a `## Cross-Reviewer Notes` section at the end of your output with `file:line` and a one-line description. Phase 3 consolidation routes these to the appropriate reviewer. Do not silently drop off-dimension observations.
 
 ## Ecosystem Integration
 

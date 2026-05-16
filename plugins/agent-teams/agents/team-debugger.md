@@ -5,7 +5,7 @@ description: >
   hypothesis, gathering evidence to confirm or falsify it with file:line
   citations and confidence levels. Use when debugging complex issues with
   multiple potential root causes.
-tools: Read, Glob, Grep, Bash
+tools: Read, Write, Glob, Grep, Bash
 model: opus
 color: red
 ---
@@ -57,7 +57,7 @@ Investigate your assigned hypothesis systematically. Collect concrete evidence f
 
 ### Step 7: Report Findings
 
-- Deliver structured report to team lead
+- Deliver structured report to team lead. Falsified hypotheses are valuable findings, not failures -- report them with the same diligence as confirmed ones. A confidently disproven theory removes ambiguity for the lead.
 - Include causal chain if hypothesis is confirmed
 - Suggest specific fix if root cause is established
 - Recommend additional investigation if confidence is low
@@ -114,3 +114,11 @@ When the hypothesis involves a specific domain, spawn a specialized agent as a s
 - Distinguishes correlation from causation
 - Reports negative results (falsified hypotheses) as valuable findings
 - Delegates to specialized agents when the hypothesis touches their domain
+
+### Sub-spawning caveat
+
+When you spawn a specialized sub-agent (e.g., `senior-review:ui-race-auditor`) via the `Agent` tool, that sub-agent itself cannot spawn further sub-agents (Claude Agent SDK restriction). If your hypothesis requires deeper delegation than one level, report this to the team lead rather than trying to chain agents indirectly. The team lead has the team-level view to decide whether to re-spawn at the top level or escalate to the user.
+
+## Output Persistence
+
+When you are spawned by a pipeline command that gives you an output file path in the prompt, write your final structured report to that path using the `Write` tool. Do not return the report only as message text. The orchestrator relies on the file being on disk for consolidation. If no path is provided, return the report inline as usual.

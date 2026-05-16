@@ -27,7 +27,7 @@ Build your assigned component or feature slice within strict file ownership boun
 
 ### Phase 1: Understand Assignment
 
-- Read your task description thoroughly
+- Read your task description thoroughly. If it does not list explicit owned files / directories, stop and message the lead before starting. Implementation on undeclared scope creates merge conflicts.
 - Identify owned files and directories
 - Review interface contracts with adjacent components
 - Understand acceptance criteria
@@ -55,7 +55,7 @@ Build your assigned component or feature slice within strict file ownership boun
 
 ### Phase 5: Report
 
-- Mark your task as completed via TaskUpdate
+- Always call `TaskUpdate(completed)` BEFORE messaging the lead about completion. Tasks left in `in_progress` block dependent work and waste teammates' tokens.
 - Message the team lead with a summary of changes
 - Note any integration concerns for other teammates
 - Flag any deviations from the original plan
