@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "Claude Code Daodan -- 43 plugins that augment Claude Code into a specialized toolkit. Agents, skills, and commands for code quality, Tauri/Rust development, frontend, AI tooling, scraping, trading, observability, reverse engineering, constraint programming, libGDX game development, and Kotlin (coroutines, KMP, Compose, Ktor).",
-    "version": "6.9.0"
+    "version": "6.10.0"
   },
   "plugins": [
     {
@@ -428,8 +428,8 @@
     {
       "name": "project-setup",
       "source": "./plugins/project-setup",
-      "description": "Project configuration and setup tools including CLAUDE.md creation and maintenance with ground truth validation",
-      "version": "1.9.1",
+      "description": "Project configuration and setup tools including CLAUDE.md creation and maintenance with ground truth validation. Generated CLAUDE.md files always include a canonical Working Principles section (Karpathy-inspired: Think Before Coding, Simplicity First, Surgical Changes, Goal-Driven Execution).",
+      "version": "1.10.0",
       "author": {
         "name": "Alfio"
       },

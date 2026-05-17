@@ -139,6 +139,24 @@ See `docs/deployment.md` for environment variables and configuration.
 3. Add TypeScript types
 4. Add tests
 
+## Working Principles
+
+### 1. Think Before Coding
+State assumptions explicitly. Ask when uncertain.
+Present tradeoffs; don't pick silently.
+
+### 2. Simplicity First
+Minimum code that solves the problem.
+No speculative features or abstractions.
+
+### 3. Surgical Changes
+Touch only what the task requires.
+Match existing style. Clean up only your own orphans.
+
+### 4. Goal-Driven Execution
+Define success criteria, then loop until verified.
+Transform "do X" into "X passes test Y".
+
 ## Key Principles
 
 - **TypeScript strict mode enabled** - Fix type errors, don't use `any`

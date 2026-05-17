@@ -157,6 +157,7 @@ The agent verifies:
 - **Uncertainty**: Flags claims that cannot be verified from codebase alone
 - **Gaps**: Identifies undocumented commands, dependencies, configs, and patterns
 - **Project structure completeness**: Verifies all significant directories and files are mapped with descriptions
+- **Working Principles block**: Checks presence of the canonical `## Working Principles` section (the 4 Karpathy meta-rules); flags as High if missing or gutted and offers to insert
 - **Best practices**: Assesses proportional sizing, progressive disclosure, structure detail
 
 ## Improvement Categories
@@ -172,6 +173,7 @@ The agent verifies:
 - Code duplication
 - Missing important context
 - Incomplete project structure map (missing file/directory descriptions)
+- Missing or gutted `## Working Principles` block (insert the canonical 4 Karpathy meta-rules, preserve any coexisting project-specific principles)
 
 ### Medium Priority (Consider Based on Goals)
 - Organizational improvements
