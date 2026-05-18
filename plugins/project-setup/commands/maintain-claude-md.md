@@ -11,10 +11,11 @@ subagent: project-setup:claude-md-auditor
 
 ## CRITICAL RULES
 
-1. **Verify against codebase.** Every claim in CLAUDE.md must be checked against actual files, commands, and dependencies.
-2. **Show findings before changing.** Present the audit report and get approval before modifying anything.
-3. **Never delete user preferences** unless the user explicitly approves. Preferences (coding style, workflow choices) are intentional.
-4. **Never enter plan mode.** Execute immediately.
+1. **Keep CLAUDE.md under 40,000 characters.** This is a hard cap (Claude Code surfaces a performance warning above this threshold). Run `wc -c CLAUDE.md` after every edit. Target <35k to leave headroom. If the audit finds the file already over 40k, the **primary fix** is to extract sections to `docs/<topic>.md` and replace them with thin `Read docs/<topic>.md` pointers. Never finalize an edit that leaves the file over 40k.
+2. **Verify against codebase.** Every claim in CLAUDE.md must be checked against actual files, commands, and dependencies.
+3. **Show findings before changing.** Present the audit report and get approval before modifying anything.
+4. **Never delete user preferences** unless the user explicitly approves. Preferences (coding style, workflow choices) are intentional.
+5. **Never enter plan mode.** Execute immediately.
 
 This command launches an interactive session to audit and optionally improve your `CLAUDE.md` file. It verifies accuracy, detects obsolete information, and guides you through prioritized improvements.
 
@@ -148,6 +149,7 @@ Agent: Understood. Here's the complete audit report:
 ## Audit Verification
 
 The agent verifies:
+- **File size <40k characters**: Runs `wc -c CLAUDE.md`. Any value over 40,000 is a Critical finding (Claude Code performance warning threshold); 35,000-40,000 is High (no headroom). Primary fix: extract sections to `docs/<topic>.md` and link via `Read docs/<topic>.md` pointers
 - **File paths**: Checks all referenced files and directories exist
 - **Commands**: Validates npm scripts, build commands, test commands
 - **Dependencies**: Confirms packages mentioned are actually installed
@@ -165,6 +167,7 @@ The agent verifies:
 ## Improvement Categories
 
 ### Critical (Auto-fix Recommended)
+- File size over 40,000 characters (Claude Code performance warning threshold) - extract sections to `docs/<topic>.md` and replace with `Read docs/<topic>.md` pointers until the file is back under the cap
 - Factually incorrect information
 - Non-existent file paths
 - Broken commands

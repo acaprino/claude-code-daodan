@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "Claude Code Daodan -- 43 plugins that augment Claude Code into a specialized toolkit. Agents, skills, and commands for code quality, Tauri/Rust development, frontend, AI tooling, scraping, trading, observability, reverse engineering, constraint programming, libGDX game development, and Kotlin (coroutines, KMP, Compose, Ktor).",
-    "version": "6.13.2"
+    "version": "6.13.3"
   },
   "plugins": [
     {
@@ -428,8 +428,8 @@
     {
       "name": "project-setup",
       "source": "./plugins/project-setup",
-      "description": "Project configuration and setup tools including CLAUDE.md creation and maintenance with ground truth validation. Generated CLAUDE.md files always include a canonical Working Principles section (Karpathy-inspired: Think Before Coding, Simplicity First, Surgical Changes, Goal-Driven Execution); the auditor also proposes an optional external pointer to the fuller Karpathy guidelines and recommends extracting bloated content to docs/ via thin pointers.",
-      "version": "1.11.0",
+      "description": "Project configuration and setup tools including CLAUDE.md creation and maintenance with ground truth validation. Enforces a hard 40,000-character cap on CLAUDE.md (Claude Code performance warning threshold) by extracting bloated sections to docs/ via thin pointers. Generated CLAUDE.md files always include a canonical Working Principles section (Karpathy-inspired: Think Before Coding, Simplicity First, Surgical Changes, Goal-Driven Execution); the auditor also proposes an optional external pointer to the fuller Karpathy guidelines.",
+      "version": "1.11.1",
       "author": {
         "name": "Alfio"
       },
