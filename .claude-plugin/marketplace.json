@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "Claude Code Daodan -- 43 plugins that augment Claude Code into a specialized toolkit. Agents, skills, and commands for code quality, Tauri/Rust development, frontend, AI tooling, scraping, trading, observability, reverse engineering, constraint programming, libGDX game development, and Kotlin (coroutines, KMP, Compose, Ktor).",
-    "version": "6.10.1"
+    "version": "6.11.0"
   },
   "plugins": [
     {
@@ -1348,7 +1348,7 @@
       "name": "grabber-development",
       "source": "./plugins/grabber-development",
       "description": "Expert Python web scraping -- coordinator (grabber-architect) plus three specialists: stealth-browser-expert (Patchright/Camoufox/Nodriver + CAPTCHA), http-fingerprint-expert (JA4+/curl_cffi/primp + proxies/Web Unlocker), ai-scraping-expert (Crawl4AI/Firecrawl/ScrapeGraphAI + Pydantic + GraphQL RE)",
-      "version": "1.1.2",
+      "version": "1.2.0",
       "author": {
         "name": "Alfio"
       },
