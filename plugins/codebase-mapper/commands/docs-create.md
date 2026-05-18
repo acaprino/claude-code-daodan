@@ -1,9 +1,9 @@
 ---
 description: >
-  Create accurate technical documentation by analyzing the codebase first -- API docs, architecture guides, component docs, or full project documentation.
-  TRIGGER WHEN: the user asks to create API docs, architecture guides, component docs, or new technical documentation for a codebase.
-  DO NOT TRIGGER WHEN: the user wants to audit existing docs (use /codebase-mapper:docs-maintain) or just a README (use /docs:maintain-readme).
-argument-hint: "<target path or description> [--api-only] [--architecture] [--format markdown|html] [--output <path>]"
+  Create accurate technical documentation by analyzing the codebase first. Covers public interfaces (APIs, CLI, library exports, emitted events), configuration, integrations, architecture, data model and schema, data flows, state machines, dependencies (internal + external), concurrency, domain glossary, auth/security, error handling, observability, deployment, testing strategy, performance, compliance, or full project documentation. One artifact per invocation; multiple flags combine into a single document with sections.
+  TRIGGER WHEN: the user asks to create technical documentation, API docs, architecture guides, data model / schema docs, data flow / pipeline docs, dependency maps, or any new documentation for a codebase.
+  DO NOT TRIGGER WHEN: the user wants to audit existing docs (use /codebase-mapper:docs-maintain) or just a README (use /docs:maintain-readme) or a full multi-document project guide (use /codebase-mapper:map-codebase).
+argument-hint: "<target path or description> [--interfaces] [--config] [--integrations] [--architecture] [--data-model] [--data-flows] [--state-machines] [--dependencies] [--concurrency] [--glossary] [--auth] [--errors] [--observability] [--deployment] [--testing] [--build-release] [--migrations] [--performance] [--compliance] [--component] [--full] [--scope <dim1,dim2,...>] [--format markdown|html] [--output <path>]"
 ---
 
 # Create Documentation
@@ -36,7 +36,7 @@ Identify:
 
 ## Step 2: Confirm Documentation Plan
 
-Present the plan and ask for approval:
+Present the plan and ask for approval. The documentation dimensions are grouped into 5 fasce. The user can pick one dimension, several (combined into a single artifact with sections), an entire fascia, or `--full` for everything.
 
 ```
 Documentation plan for: [target]
@@ -45,15 +45,46 @@ Language: [detected]
 Framework: [detected]
 
 Files to document:
-- [file1] -- [type: API endpoint / class / module / utility]
+- [file1] -- [type: API endpoint / class / module / ORM model / config / etc.]
 - [file2] -- [type]
 - ...
 
-Documentation type:
-- [ ] API reference (endpoints, parameters, responses)
-- [ ] Architecture guide (system design, component relationships)
-- [ ] Component documentation (individual module docs)
-- [ ] Full project documentation (all of the above)
+Documentation dimensions (pick one or more; can also pick a whole fascia):
+
+SURFACE (what the system exposes)
+- [ ] interfaces       -- HTTP/REST, gRPC, GraphQL, WebSocket, CLI, library exports, events emitted (Kafka topics, RabbitMQ exchanges, webhooks emitted)
+- [ ] config           -- env vars, config files, feature flags, secrets references, runtime profiles
+- [ ] integrations     -- webhooks consumed, third-party APIs called, message queues, scheduled jobs/cron
+
+INTERNALS (what the system is)
+- [ ] architecture     -- layers, bounded contexts, component boundaries, design decisions (ADR-style)
+- [ ] data-model       -- entities, DB schema, DTO/Pydantic/Zod/dataclass, ER diagram, constraints, indexes, migrations
+- [ ] data-flows       -- request lifecycle, data pipelines, event flows, sequence diagrams, sagas
+- [ ] state-machines   -- FSMs, lifecycle of domain objects, allowed transitions
+- [ ] dependencies     -- internal module-to-module call graph + external libraries (with versions) + external services / SaaS
+- [ ] concurrency      -- workers, queues, schedulers, async tasks, locking, idempotency
+- [ ] glossary         -- ubiquitous language, domain terminology, business rules
+
+OPERATIONS (how the system runs)
+- [ ] auth             -- authn/authz flows, RBAC/ABAC, secrets management, PII handling, threat surface
+- [ ] errors           -- error catalog, retry policy, circuit breaker, fallback, idempotency boundaries
+- [ ] observability    -- logs emitted, metrics exposed, traces, alerts, referenced dashboards
+- [ ] deployment       -- Docker/K8s/Terraform, CI/CD, environments, DNS/networking, operational runbooks
+
+PROCESS (how the system evolves)
+- [ ] build-release    -- versioning, changelog, release cadence, hot-fix process
+- [ ] testing          -- test pyramid, fixtures, mocks, coverage gaps
+- [ ] migrations       -- upgrade paths, breaking changes, deprecation cycle
+
+CROSS-CUTTING
+- [ ] performance      -- SLA/SLO, latency, throughput, known bottlenecks
+- [ ] compliance       -- GDPR/PCI/HIPAA/SOC2 controls visible in code
+
+TARGETED
+- [ ] component        -- deep dive on a single module/class (zoom)
+
+FULL
+- [ ] full             -- all of the above, indexed with table of contents
 
 Output: [format] at [output path]
 
@@ -64,9 +95,11 @@ Output: [format] at [output path]
 
 Use AskUserQuestion. Do NOT proceed until the user confirms.
 
+If the user picks multiple dimensions, the result is ONE document with one section per dimension (in the order above). If the user picks `--full`, run every dimension. For very large scopes, suggest `/codebase-mapper:map-codebase` instead.
+
 ## Step 3: Generate Documentation
 
-Use the `documentation-engineer` agent for the heavy lifting:
+Use the `documentation-engineer` agent for the heavy lifting. The agent must run the per-dimension procedure defined in its own system prompt (section "DIMENSION-SPECIFIC GENERATION GUIDE"). The command's job here is just to pass the selected dimensions and the source material.
 
 ```
 Task:
@@ -79,41 +112,34 @@ Task:
     [Insert path and description]
 
     ## Source Code
-    [Insert contents of key files -- the agent needs to see the actual code]
+    [Insert contents of key files -- the agent needs to see the actual code.
+     For data-model dimension include ORM models, schemas, migrations.
+     For interfaces include route definitions, CLI entry points, library exports.
+     For dependencies include package manifests (package.json, pyproject.toml,
+     Cargo.toml, go.mod) and a sample of imports.
+     For deployment include Dockerfile, compose, k8s manifests, CI workflows.]
 
-    ## Documentation Type
-    [API reference / Architecture / Component / Full -- from user's choice]
+    ## Selected Dimensions
+    [List the dimensions chosen by the user, e.g.: interfaces, data-model, dependencies]
+    [If multiple, produce ONE markdown document with one top-level section per
+     dimension, in the order listed in the command's Step 2.]
 
     ## Instructions
-    Analyze the code bottom-up and generate documentation that includes:
+    For each selected dimension, follow the corresponding procedure in the
+    "DIMENSION-SPECIFIC GENERATION GUIDE" section of your own system prompt.
+    Do not invent procedures the system prompt does not describe.
 
-    For API Reference (--api-only):
-    - Every endpoint with method, path, parameters, request/response schemas
-    - Authentication requirements
-    - Error responses with status codes
-    - Example requests/responses
+    CRITICAL:
+    - Every claim must come from reading the actual code. Do not guess or assume.
+    - If something is unclear from the code, write `[NEEDS VERIFICATION]` rather
+      than inventing it.
+    - Cite source as `**Source:** path/file.ext:line` on every entity, endpoint,
+      env var, dependency entry, state transition, alert, etc.
+    - Produce a Mermaid diagram where applicable (erDiagram for data-model,
+      flowchart for data-flows, stateDiagram-v2 for state-machines,
+      graph LR for architecture/dependencies, sequenceDiagram for request flows).
 
-    For Architecture (--architecture):
-    - System overview with component diagram (Mermaid)
-    - Component responsibilities and boundaries
-    - Data flow between components
-    - Key design decisions and trade-offs
-
-    For Component Documentation:
-    - Module purpose and responsibility
-    - Public API (functions, classes, methods) with signatures and descriptions
-    - Usage examples
-    - Dependencies and relationships
-
-    For Full Project Documentation:
-    - All of the above, organized with table of contents
-    - Getting started guide
-    - Development workflow
-
-    CRITICAL: Every claim must come from reading the actual code. Do not guess or assume.
-    If something is unclear from the code, say so rather than inventing documentation.
-
-    Write the documentation as a structured markdown document.
+    Write the documentation as a single structured markdown document.
 ```
 
 ## Step 4: AI Trace Removal
@@ -163,8 +189,14 @@ If the output directory doesn't exist, create it.
 
 ## Quick Examples
 
-- `/docs-create src/api` -- Document all API endpoints in src/api
-- `/docs-create UserService` -- Document the UserService class
-- `/docs-create --architecture` -- Generate architecture documentation for the project
-- `/docs-create src/utils --api-only` -- Document only public exports from utils
-- `/docs-create src/ --output docs/technical.md` -- Full docs to a specific file
+- `/docs-create src/api --interfaces` -- Document all API endpoints + emitted events in src/api
+- `/docs-create UserService --component` -- Deep dive on the UserService class
+- `/docs-create --architecture` -- Architecture doc for the whole project
+- `/docs-create --data-model` -- Entities, schema, ER diagram for the whole project
+- `/docs-create src/models --data-model` -- Data model for a specific module
+- `/docs-create --integrations --auth` -- Inbound/outbound integrations + auth model in one document
+- `/docs-create --config --observability --deployment` -- Operational doc (env vars + logs/metrics + deploy)
+- `/docs-create --dependencies` -- Internal call graph + external libraries with versions
+- `/docs-create --data-flows` -- Request lifecycle, pipelines, event flows with sequence diagrams
+- `/docs-create --state-machines` -- FSM diagrams for domain objects
+- `/docs-create --full --output docs/technical.md` -- Everything in one file
