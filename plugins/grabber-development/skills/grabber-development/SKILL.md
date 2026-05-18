@@ -13,6 +13,25 @@ description: >
 
 Knowledge base for building production-grade Python web scraping systems. Covers the full stack from target assessment through production observability.
 
+## First Tool Call on Every Scraping Task
+
+This section overrides everything else in this skill if there is any conflict. Read it first, act on it first.
+
+When this skill activates on a scraping task, **your next non-question tool call MUST launch a visible browser with the capture surface attached**. Not `Write pyproject.toml`. Not `Write models.py`. Not "let me sketch the architecture first". Browser first, then code.
+
+The default path is **user-driven navigation with live capture**, not Claude-clicks. The user knows their data and their portal better than you do, and authenticated SaaS sites need them anyway. Steps:
+
+1. Ask the bare minimum to start: target URL, what data is wanted, authenticated yes/no. One short batch of questions, then stop asking.
+2. Immediately invoke `playwright-skill` (preferred) or write an inline Patchright script via `Bash`. The script must run with `headless=False`, attach every handler in the Capture Surface below, and park on `input()` waiting for the user.
+3. Tell the user verbatim: "Browser is open with full network capture (XHR + fetch + WebSocket + SSE + workers + cookies + main-frame navigations). Log in, navigate to the data, apply the filters you'd use day-to-day, then press Enter here so I can dump the capture and reason from real endpoints."
+4. While the user navigates, you watch the capture stream. When they press Enter you have: real URLs, real endpoint paths, real field names, real WebSocket frames, real auth cookies. *Now* you can scaffold.
+
+The Claude-drives variant is fine only when there is no login, no 2FA, and no UI-knowledge gap. Same launch, same capture handlers; you call `page.goto` / `page.click` yourself instead of parking on `input()`.
+
+Writing project files (`pyproject.toml`, `src/<pkg>/...`, `models.py`) before the capture is in your hands is the failure mode this section exists to prevent. If you catch yourself drafting field-name `alias` tuples from "common patterns" (Italian + English, REST conventions, framework defaults), stop and launch the browser instead.
+
+The full capture surface, output checklist, and anti-patterns are in the **Discovery Gate** section below. Read those too. But the imperative is here: **browser before code, every time, user navigates by default.**
+
 ## When to Use
 
 - Assessing a target site's protection level and choosing the right tools
@@ -30,20 +49,35 @@ Knowledge base for building production-grade Python web scraping systems. Covers
 
 **Phase 1 (Target Assessment) and Phase 2 (Data Discovery) are blocking gates, not optional steps.** You MUST execute them yourself and have their concrete outputs in hand before scaffolding any project file (`pyproject.toml`, modules, models, CLI). No exceptions.
 
-**You execute the discovery, not the user.** When the target is reachable from your environment, drive the browser yourself via `playwright-skill` (writes scripts to `/tmp`, runs them with a visible browser, returns DOM + network traffic to you in-loop). Patchright code embedded below is fine too. The point is the same: Claude opens the browser, Claude observes the traffic, Claude records the real URLs and field names.
+**You always control the browser session and the capture.** The deliverable of discovery is not a script you hand over; it is a live capture you watched. Always launch the browser yourself (via `playwright-skill` or inline Patchright) with `headless=False` and the full capture surface attached, and keep the session open inside your turn.
 
-A user-runnable discovery script (`scripts/discover.py` style) is allowed ONLY when:
-- The user must type credentials / 2FA / OTP that you cannot enter automatically, OR
-- The target is firewalled / VPN-only / requires the user's machine identity, OR
-- The user explicitly asks for a handoff script.
+**Who clicks depends on the task. The capture is yours either way:**
 
-In every other case, "I wrote a discovery script for you to run" is a workflow failure. Open the browser instead.
+- **Claude clicks** when the target is reachable without the user: no login, no 2FA, you know the UI, you can guess the right filters.
+- **User clicks, you watch in-loop** when the target needs the user: login, 2FA / OTP, navigation choices only the user can make, or the user wants to drive the filters / dates / screens visited. This is the gold-standard path for authenticated SaaS portals because the user knows exactly which screens hold the target data. Launch the browser visibly, park on an `input()` checkpoint, let the user navigate while the network capture streams live, then dump the capture when they signal "done".
+- The actual anti-pattern is writing `scripts/discover.py` and telling the user "run this and paste the output back". That breaks the loop: by the time the user runs it, you have no eyes on the session and no chance to ask "wait, click that filter again, I lost the payload".
+
+**Capture surface (attach all of these from page launch):**
+
+- `page.on("request")` / `page.on("response")` for XHR + fetch (URL, method, status, headers, cookies, request body, response body when JSON or text)
+- `page.on("websocket")` then `ws.on("framesent")` / `ws.on("framereceived")` for WebSocket traffic in both directions
+- Response content-type sniff for `text/event-stream` (SSE) and chunked transfer
+- `page.on("worker")` for service-worker- and dedicated-worker-initiated requests
+- GraphQL detection: URL ends in `/graphql`, request body has `operationName` / `variables` / `extensions.persistedQuery.sha256Hash`
+- `context.cookies()` after login, plus any anti-bot cookies (`cf_clearance`, `__cf_bm`, `datadome`, `_px3`, `ak_bmsc`, `incap_ses`)
+- `page.on("framenavigated")` filtered to the main frame, to record every landing URL after redirects
+
+Redact `Authorization`, `Cookie`, and password fields in anything saved to disk. Keep them in the in-memory capture you reason from.
 
 **Discovery outputs you MUST collect before scaffolding** (treat as a checklist; if any item is still a guess, you have not finished discovery):
 - Real URL of every page that holds target data (not assumed paths, not `/#/...` guesses)
 - Real XHR/fetch endpoint URLs, methods, status codes, request headers, cookies
 - Real field names and shapes from at least one captured JSON response (paste a redacted sample into the design notes)
-- Anti-bot fingerprint (`cf_clearance`, `__cf_bm`, `datadome`, `_px3`, `ak_bmsc`, `incap_ses` -- present or absent)
+- For any WebSocket the page opens: handshake URL, subprotocol, first frames in each direction (auth + subscribe), recurring message schema
+- For any SSE / EventSource stream: endpoint URL, event types, payload shape
+- For GraphQL: exact `operationName` and `variables`, persisted-query SHA if present
+- For service-worker / dedicated-worker requests: the worker URL and the requests it issues
+- Anti-bot fingerprint check: `cf_clearance`, `__cf_bm`, `datadome`, `_px3`, `ak_bmsc`, `incap_ses` present or absent
 - SPA framework / DOM structure of any page where API discovery fails and a DOM fallback is needed
 
 If any of those is still a guess, you have not finished discovery; do not proceed to scaffolding.
