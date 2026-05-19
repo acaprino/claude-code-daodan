@@ -5,7 +5,7 @@ description: >
   evidence collection, and root cause arbitration. Use this skill when debugging
   bugs with multiple potential causes, performing root cause analysis, or
   organizing parallel investigation workflows.
-version: 1.1.0
+version: 1.2.0
 ---
 
 # Parallel Debugging
@@ -135,6 +135,87 @@ Before declaring the bug fixed:
 - [ ] Original reproduction case no longer fails
 - [ ] Related edge cases are covered
 - [ ] Relevant tests are added or updated
+
+## Runtime Evidence Pattern
+
+When arbitration leaves hypotheses Plausible or Inconclusive and static evidence is exhausted, inject targeted runtime logs to disambiguate. The pattern is designed so cleanup is mechanical (grep + delete) and the logs never leak into production.
+
+### Log Convention
+
+Every injected log MUST follow this format:
+
+```
+[DEBUG] [{file}:{line}] {short description} { {relevant vars} }
+```
+
+Concrete examples per language:
+
+```javascript
+// JS/TS
+console.log("[DEBUG] [auth.ts:42] before token verify", { tokenLen: token.length, hasUser: !!user })
+```
+
+```python
+# Python
+print(f"[DEBUG] [auth.py:42] before token verify", {"token_len": len(token), "has_user": user is not None})
+# or
+logger.debug("[DEBUG] [auth.py:42] before token verify token_len=%d has_user=%s", len(token), user is not None)
+```
+
+```rust
+// Rust
+eprintln!("[DEBUG] [auth.rs:42] before token verify token_len={} has_user={}", token.len(), user.is_some());
+```
+
+```go
+// Go
+fmt.Fprintf(os.Stderr, "[DEBUG] [auth.go:42] before token verify token_len=%d has_user=%v\n", len(token), user != nil)
+```
+
+The `[DEBUG]` prefix is non-negotiable. It is the cleanup anchor.
+
+### Strategic Placement
+
+Pick 3-5 points, not more. Flooding logs makes signal harder to extract.
+
+| Location          | Captures                            |
+| ----------------- | ----------------------------------- |
+| Function entry    | Confirms execution path, args       |
+| Before async call | State just before the operation     |
+| After async call  | Result, error, timing               |
+| Conditional       | Which branch was taken              |
+| Catch block       | Error name, message, partial state  |
+
+### What NOT to Log
+
+- Passwords, tokens, API keys (use length or `present/absent` markers instead)
+- PII (email, phone, names) unless masked
+- Full request/response bodies (use sizes and selected fields)
+- Inside hot loops without rate limiting
+
+### Cleanup Protocol
+
+After the bug is verified fixed, remove every `[DEBUG]` log. The grep is the source of truth — if grep returns zero matches, cleanup is complete.
+
+```bash
+# JS/TS
+grep -rn '\[DEBUG\]' . --include='*.ts' --include='*.tsx' --include='*.js' --include='*.jsx'
+
+# Python
+grep -rn '\[DEBUG\]' . --include='*.py'
+
+# Rust
+grep -rn '\[DEBUG\]' . --include='*.rs'
+
+# Go
+grep -rn '\[DEBUG\]' . --include='*.go'
+```
+
+Multi-line console statements that span more than the matched line must be removed in full. Verify the file still parses after deletion.
+
+### Iteration Cap
+
+A debug session should perform at most **2 rounds** of log injection. If after the second round the hypotheses are still Inconclusive, escalate to the user with a written summary of what has been ruled out and what additional context (MCP access, production logs, a minimal reproduction) would be needed.
 
 ## Specialized Investigation Agents
 

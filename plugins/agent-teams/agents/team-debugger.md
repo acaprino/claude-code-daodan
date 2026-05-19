@@ -96,6 +96,16 @@ Leverage specialized marketplace agents and skills during investigation:
 - Reference `senior-review:defect-taxonomy` skill to classify findings using standard categories with CWE/OWASP mappings
 - Use the 6 failure mode categories (Logic Error, Data Issue, State Problem, Integration Failure, Resource Issue, Environment) from `agent-teams:parallel-debugging` skill
 
+### For Runtime Evidence Collection
+
+When a hypothesis cannot be confirmed from static evidence alone, the team-lead may assign you a log-injection task. Follow the Runtime Evidence Pattern in `agent-teams:parallel-debugging` skill:
+
+- Use the canonical format: `[DEBUG] [{file}:{line}] {description} { {vars} }`
+- Pick 3-5 strategic points (function entry, before/after async, conditionals, catch blocks)
+- Never log secrets, tokens, or PII; substitute length/presence markers
+- Report a per-location purpose table so the user knows what each log captures
+- Do not modify behavior — logs only
+
 ### For Domain-Specific Investigation
 
 When the hypothesis involves a specific domain, spawn a specialized agent as a sub-investigator:

@@ -93,7 +93,45 @@ Present hypotheses to user: "Generated {N} hypotheses. Spawning investigators...
    - {hypothesis 3}: {status} -- {brief evidence summary}
    ```
 
-## Phase 6: Cleanup
+4. Branch on arbitration outcome:
+   - **At least one Confirmed (High confidence)** → skip Phase 6, proceed to Phase 7
+   - **No Confirmed but ≥1 Plausible/Inconclusive that runtime data could disambiguate** → proceed to Phase 6
+   - **No Confirmed and no Plausible** → report failure to user, ask for additional context, optionally return to Phase 2 with new hypotheses
 
-1. Send `shutdown_request` to all investigators
-2. Call `TeamDelete` to remove team resources
+## Phase 6: Targeted Log Injection (conditional)
+
+Run only when Phase 5 arbitration is inconclusive and runtime evidence would disambiguate. Skip otherwise.
+
+1. Identify the 3-5 most informative observation points across the surviving hypotheses (function entries, before/after async boundaries, conditional branches, catch blocks).
+2. Spawn one `team-debugger` (or the appropriate specialized investigator) with prompt: "Inject `[DEBUG]` logs at the following locations: {list}. Do not modify behavior. Use the Runtime Evidence Pattern from `agent-teams:parallel-debugging`."
+3. Use the canonical log format from the `parallel-debugging` skill:
+   ```
+   [DEBUG] [{file}:{line}] {description} { {vars} }
+   ```
+4. Report injection summary to the user with a per-location purpose table, then prompt: "Reproduce the bug and paste the console output."
+5. Treat the user's pasted output as new evidence. Return to Phase 5 with the surviving hypotheses re-arbitrated against the runtime data.
+6. Cap iterations at 2 rounds of log injection. If still inconclusive, escalate to the user with a written summary of what was ruled out and what would be needed next.
+
+## Phase 7: Fix Proposal & Verification
+
+1. Present the minimal fix in diff format with the confidence score of the confirmed hypothesis.
+2. Ask the user to approve before applying.
+3. After applying, ask the user to reproduce the original failure.
+4. Branch on result:
+   - **Fixed** → proceed to Phase 8
+   - **Not fixed** → return to Phase 2 (hypothesis generation) carrying the new negative evidence; the previously "confirmed" hypothesis becomes Falsified
+
+## Phase 8: Cleanup
+
+Two cleanup actions, in order:
+
+1. **Debug log cleanup** (only if Phase 6 ran):
+   - Grep for the prefix across modified files. For JS/TS:
+     ```bash
+     grep -rn '\[DEBUG\]' . --include='*.ts' --include='*.tsx' --include='*.js' --include='*.jsx'
+     ```
+     For other languages, swap the `--include` globs accordingly.
+   - Remove every matched line. Report the count: "Removed {N} debug logs from {file count} files."
+2. **Team teardown**:
+   - Send `shutdown_request` to all investigators
+   - Call `TeamDelete` to remove team resources
