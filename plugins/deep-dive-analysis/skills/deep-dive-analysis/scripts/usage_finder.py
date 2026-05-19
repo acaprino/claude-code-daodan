@@ -36,14 +36,12 @@ SUBPROCESS_TIMEOUT_SECONDS: int = 30
 logger = logging.getLogger(__name__)
 
 
-SOURCE_EXTENSIONS: tuple[str, ...] = (
-    ".py", ".pyi",
-    ".java",
-    ".js", ".mjs", ".cjs", ".jsx",
-    ".ts", ".tsx", ".mts", ".cts",
-    ".sql", ".ddl", ".dml",
-    ".pks", ".pkb", ".plsql", ".pls", ".pck", ".prc", ".fnc", ".trg",
-)
+# Single source of truth for the languages package; no longer maintained
+# separately here. Re-exported so callers that imported it from this module
+# keep working.
+from languages import SUPPORTED_EXTENSIONS as _SUPPORTED_EXTENSIONS_MAP
+
+SOURCE_EXTENSIONS: tuple[str, ...] = tuple(_SUPPORTED_EXTENSIONS_MAP.keys())
 
 DEFAULT_EXCLUDES = (
     "__pycache__",

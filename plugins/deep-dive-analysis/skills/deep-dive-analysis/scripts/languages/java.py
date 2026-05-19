@@ -74,13 +74,24 @@ def _scan_external_calls(content: str) -> list[ExternalCallInfo]:
 # ---------------------------------------------------------------------------
 
 
+_TS_ERROR_HOLDER: dict[str, str] = {}
+
+
 def _ts_parse(content: str) -> ParseResult | None:
     pair = get_parser("java")
     if pair is None:
         return None
     parser, lang = pair
     src = content.encode("utf-8")
-    tree = parser.parse(src)
+    try:
+        tree = parser.parse(src)
+    except Exception as e:
+        # Tree-sitter MAY raise on extreme input (deep recursion, encoding).
+        # parse() is contractually non-raising; signal caller to fall back to
+        # regex parsing by returning None, and record the error so _JavaAdapter
+        # can annotate the result's `notes`.
+        _TS_ERROR_HOLDER["last"] = f"{type(e).__name__}: {e}"
+        return None
 
     classes: list[ClassInfo] = []
     functions: list[FunctionInfo] = []  # Java methods only exist inside types.
@@ -382,9 +393,13 @@ class _JavaAdapter:
     language = "java"
 
     def parse(self, content: str, file_path: str) -> ParseResult:
+        _TS_ERROR_HOLDER.pop("last", None)
         result = _ts_parse(content)
         if result is None:
             result = _regex_parse(content)
+            err = _TS_ERROR_HOLDER.pop("last", None)
+            if err is not None:
+                result.notes.append(f"tree-sitter raised: {err}")
         result.file_path = file_path
         return result
 

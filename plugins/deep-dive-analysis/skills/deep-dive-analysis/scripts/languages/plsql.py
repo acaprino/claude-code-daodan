@@ -38,10 +38,6 @@ _PACKAGE_RE = re.compile(
     r"\bCREATE(?:\s+OR\s+REPLACE)?\s+(?:EDITIONABLE\s+|NONEDITIONABLE\s+)?PACKAGE(?:\s+BODY)?\s+(?P<schema>\w+\.)?(?P<name>\w+)\b",
     re.IGNORECASE,
 )
-_PACKAGE_BODY_RE = re.compile(
-    r"\bCREATE(?:\s+OR\s+REPLACE)?\s+(?:EDITIONABLE\s+|NONEDITIONABLE\s+)?PACKAGE\s+BODY\s+(?P<schema>\w+\.)?(?P<name>\w+)\b",
-    re.IGNORECASE,
-)
 _TYPE_BODY_RE = re.compile(
     r"\bCREATE(?:\s+OR\s+REPLACE)?\s+TYPE\s+BODY\s+(?P<name>\w+)",
     re.IGNORECASE,
@@ -183,8 +179,12 @@ class _PlSqlAdapter:
         return result
 
     def count_imports(self, content: str) -> int:
-        # %TYPE/%ROWTYPE references plus any standard SQL imports.
-        return len(_ROWTYPE_RE.findall(content)) + _sql.adapter.count_imports(content)
+        # Distinct %TYPE/%ROWTYPE references plus any standard SQL imports.
+        # Dedup the rowtype matches so 6 cursors all referencing `users%ROWTYPE`
+        # count as 1, not 6 -- otherwise the classifier crosses HIGH_DEPS_THRESHOLD
+        # spuriously for small PL/SQL packages.
+        unique_rowtypes = {m.group(0).lower() for m in _ROWTYPE_RE.finditer(content)}
+        return len(unique_rowtypes) + _sql.adapter.count_imports(content)
 
     def strip_comments_and_blanks(self, content: str) -> int:
         return _sql.adapter.strip_comments_and_blanks(content)

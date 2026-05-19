@@ -53,14 +53,10 @@ MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024
 MAX_ISSUES_IN_REPORT = 20
 MAX_COMMENTS_PER_SECTION = 10
 
-SUPPORTED_SUFFIXES = {
-    ".py", ".pyi",
-    ".java",
-    ".js", ".mjs", ".cjs", ".jsx",
-    ".ts", ".tsx", ".mts", ".cts",
-    ".sql", ".ddl", ".dml",
-    ".pks", ".pkb", ".plsql", ".pls", ".pck", ".prc", ".fnc", ".trg",
-}
+# Single source of truth: keep in sync with `languages.SUPPORTED_EXTENSIONS`.
+from languages import SUPPORTED_EXTENSIONS as _SUPPORTED_EXTENSIONS_MAP
+
+SUPPORTED_SUFFIXES = frozenset(_SUPPORTED_EXTENSIONS_MAP.keys())
 
 
 class CommentRewriterError(Exception):
@@ -506,10 +502,11 @@ class CommentRewriter:
         )
 
         for token in adapter.extract_comments(content):
-            is_docstring = token.is_block and not token.is_doc_block and language == "python" and token.text.startswith(("'", '"'))
-            # For Python, the existing logic also extracted module/function/class
-            # docstrings via AST. Since the comment adapter only returns # comments
-            # for Python, we additionally pull docstrings below.
+            # Python docstrings are NOT emitted by extract_python_comments
+            # (tokenize only yields `#` tokens). They are pulled separately
+            # via the AST helper `_add_python_docstrings` later in this
+            # method, so the per-token loop never sees docstrings.
+            is_docstring = False
             line_content = (
                 lines[token.line_number - 1]
                 if 0 < token.line_number <= len(lines)

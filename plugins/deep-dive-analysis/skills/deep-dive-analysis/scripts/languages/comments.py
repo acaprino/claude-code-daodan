@@ -181,8 +181,14 @@ def _extract_with_syntax(source: str, syntax: CommentSyntax) -> list[CommentToke
     in_block_comment = False
     is_doc_block = False
     block_start_line = 0
-    block_start_col = 0
+    # `comment_start_col` covers two states: column of the open marker for a
+    # block comment, OR column of the open marker for a line comment.
+    comment_start_col = 0
     block_buf: list[str] = []
+    # Index in `source` of the start of the current line comment's open marker.
+    # Initialized eagerly so a future refactor that opens a line comment via
+    # a non-standard path doesn't trip an UnboundLocalError.
+    line_start_of_comment = 0
 
     in_string = False
     string_close: str = ""
@@ -196,7 +202,7 @@ def _extract_with_syntax(source: str, syntax: CommentSyntax) -> list[CommentToke
         if ch == "\n":
             if in_line_comment:
                 # Line comment ends at newline.
-                col = block_start_col
+                col = comment_start_col
                 raw = source[line_start_of_comment:i]
                 marker_len = next(
                     (len(m) for m in syntax.line_markers if raw.startswith(m)),
@@ -231,7 +237,10 @@ def _extract_with_syntax(source: str, syntax: CommentSyntax) -> list[CommentToke
 
         if in_block_comment:
             if syntax.block_close and rest.startswith(syntax.block_close):
-                # Emit the block comment.
+                # Emit the block comment. `block_buf[0]` is the open marker
+                # (block_open or doc_block_open) by construction (see the
+                # state-entry branches below), so block_buf_str already
+                # starts with the marker -- no need for prefix gymnastics.
                 block_buf_str = "".join(block_buf) + syntax.block_close
                 marker_open = syntax.doc_block_open if is_doc_block else syntax.block_open
                 # Strip markers from text body.
@@ -244,15 +253,13 @@ def _extract_with_syntax(source: str, syntax: CommentSyntax) -> list[CommentToke
                 line_content = (
                     lines[block_start_line - 1] if 0 < block_start_line <= len(lines) else ""
                 )
-                is_inline = block_start_col > 0 and line_content[:block_start_col].strip() != ""
+                is_inline = comment_start_col > 0 and line_content[:comment_start_col].strip() != ""
                 out.append(
                     CommentToken(
                         line_number=block_start_line,
-                        column=block_start_col,
+                        column=comment_start_col,
                         text=text,
-                        raw_text=(marker_open or "") + block_buf_str
-                        if not block_buf_str.startswith(marker_open or "")
-                        else block_buf_str,
+                        raw_text=block_buf_str,
                         is_inline=is_inline,
                         is_block=True,
                         is_doc_block=is_doc_block,
@@ -273,6 +280,17 @@ def _extract_with_syntax(source: str, syntax: CommentSyntax) -> list[CommentToke
                 i += 2
                 continue
             if rest.startswith(string_close):
+                # SQL convention: doubled-close-char escapes a literal close
+                # char inside the string. `'It''s OK'` is one string, not two.
+                # When no `string_escape` is set and the next char is also the
+                # close, consume both and stay in the string.
+                if (
+                    syntax.string_escape is None
+                    and i + len(string_close) < n
+                    and source[i + len(string_close) : i + 2 * len(string_close)] == string_close
+                ):
+                    i += 2 * len(string_close)
+                    continue
                 in_string = False
                 i += len(string_close)
                 continue
@@ -285,7 +303,7 @@ def _extract_with_syntax(source: str, syntax: CommentSyntax) -> list[CommentToke
             in_block_comment = True
             is_doc_block = True
             block_start_line = line_num
-            block_start_col = i - line_start
+            comment_start_col = i - line_start
             block_buf = [syntax.doc_block_open]
             i += len(syntax.doc_block_open)
             continue
@@ -293,7 +311,7 @@ def _extract_with_syntax(source: str, syntax: CommentSyntax) -> list[CommentToke
             in_block_comment = True
             is_doc_block = False
             block_start_line = line_num
-            block_start_col = i - line_start
+            comment_start_col = i - line_start
             block_buf = [syntax.block_open]
             i += len(syntax.block_open)
             continue
@@ -305,7 +323,7 @@ def _extract_with_syntax(source: str, syntax: CommentSyntax) -> list[CommentToke
                 break
         if matched_line_marker:
             in_line_comment = True
-            block_start_col = i - line_start
+            comment_start_col = i - line_start
             line_start_of_comment = i
             i += len(matched_line_marker)
             continue
@@ -325,7 +343,7 @@ def _extract_with_syntax(source: str, syntax: CommentSyntax) -> list[CommentToke
 
     # Handle EOF inside a line comment (file ends without newline).
     if in_line_comment:
-        col = block_start_col
+        col = comment_start_col
         raw = source[line_start_of_comment:n]
         marker_len = next(
             (len(m) for m in syntax.line_markers if raw.startswith(m)),

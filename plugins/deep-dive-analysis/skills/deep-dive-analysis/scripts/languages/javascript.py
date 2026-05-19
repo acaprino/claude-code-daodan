@@ -27,21 +27,24 @@ __all__ = ["adapter"]
 _LANGUAGE_NAME = "javascript"
 
 
-_INTERNAL_PREFIX_HINTS = ("./", "../", "/")
+_RELATIVE_IMPORT_PREFIXES = ("./", "../", "/")
 
 
 def _is_internal_module(module: str) -> bool:
+    """
+    Classify a JS/TS import specifier as internal-to-the-project or external.
+
+    Internal: relative path imports (`./foo`, `../bar`, `/baz`).
+    External: `node:` builtins, scoped npm packages (`@scope/name`), and bare
+    npm specifiers (`react`, `lodash/get`). Bare specifiers default to
+    external because they're almost always npm packages -- a workspace
+    setup that aliases them internally is rare enough that we accept the
+    occasional misclassification.
+    """
     if not module:
         return False
-    if module.startswith(_INTERNAL_PREFIX_HINTS):
+    if module.startswith(_RELATIVE_IMPORT_PREFIXES):
         return True
-    # Anything that doesn't start with `node:` or look like a registry package
-    # (`name`, `@scope/name`) is most likely internal.
-    if module.startswith("node:"):
-        return False
-    if module.startswith("@"):
-        return False
-    # Bare specifier - default to external (npm package).
     return False
 
 
@@ -91,13 +94,21 @@ def _scan_external_calls(content: str) -> list[ExternalCallInfo]:
 # ---------------------------------------------------------------------------
 
 
+_TS_ERROR_HOLDER: dict[str, str] = {}
+
+
 def _ts_parse(content: str, language: str = _LANGUAGE_NAME) -> ParseResult | None:
     pair = get_parser(language)
     if pair is None:
         return None
     parser, _lang = pair
     src = content.encode("utf-8")
-    tree = parser.parse(src)
+    try:
+        tree = parser.parse(src)
+    except Exception as e:
+        # Tree-sitter MAY raise on extreme input. Signal caller via None.
+        _TS_ERROR_HOLDER["last"] = f"{type(e).__name__}: {e}"
+        return None
 
     def text(n: Any) -> str:
         return node_text(n, src)
@@ -316,8 +327,8 @@ def _ts_parse(content: str, language: str = _LANGUAGE_NAME) -> ParseResult | Non
 
 
 _IMPORT_RE = re.compile(
-    r"""^\s*import\s+(?:(?P<default>\w+)\s*,?\s*)?(?:\{\s*(?P<named>[^}]+)\}\s*)?(?:\*\s*as\s*(?P<ns>\w+)\s*)?(?:from\s+)?['"`](?P<source>[^'"`]+)['"`]""",
-    re.MULTILINE,
+    r"""import\s+(?:(?P<default>\w+)\s*,?\s*)?(?:\{\s*(?P<named>[^}]+)\}\s*)?(?:\*\s*as\s*(?P<ns>\w+)\s*)?(?:from\s+)?['"`](?P<source>[^'"`]+)['"`]""",
+    re.MULTILINE | re.DOTALL,
 )
 _REQUIRE_RE = re.compile(
     r"""(?:const|let|var)\s+(?P<binding>\{[^}]+\}|\w+)\s*=\s*require\(['"`](?P<source>[^'"`]+)['"`]\)""",
@@ -438,9 +449,13 @@ class _JavaScriptAdapter:
     language = _LANGUAGE_NAME
 
     def parse(self, content: str, file_path: str) -> ParseResult:
+        _TS_ERROR_HOLDER.pop("last", None)
         result = _ts_parse(content, self.language)
         if result is None:
             result = _regex_parse(content, self.language)
+            err = _TS_ERROR_HOLDER.pop("last", None)
+            if err is not None:
+                result.notes.append(f"tree-sitter raised: {err}")
         result.file_path = file_path
         return result
 

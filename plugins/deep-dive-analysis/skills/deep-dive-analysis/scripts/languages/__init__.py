@@ -15,8 +15,8 @@ module so it works without any external dependency.
 
 from __future__ import annotations
 
+import re
 from pathlib import Path
-from typing import TYPE_CHECKING
 
 from .base import (
     ClassInfo,
@@ -27,9 +27,7 @@ from .base import (
     ParameterInfo,
     ParseResult,
 )
-
-if TYPE_CHECKING:
-    pass
+from .comments import CommentToken
 
 __all__ = [
     "LanguageAdapter",
@@ -39,6 +37,7 @@ __all__ = [
     "ImportInfo",
     "ExternalCallInfo",
     "ParseResult",
+    "CommentToken",
     "Language",
     "detect_language",
     "get_adapter",
@@ -99,12 +98,13 @@ SUPPORTED_EXTENSIONS: dict[str, str] = {
 # Oracle-specific markers. We intentionally do NOT match generic "begin",
 # "exception", "create or replace function" - PostgreSQL plpgsql uses those
 # too. PL/SQL is only detected when the source uses Oracle-specific syntax.
-_PLSQL_CONTENT_MARKERS = (
+#
+# `%TYPE` and `%ROWTYPE` use a word-boundary regex so a SQL `LIKE '%type%'`
+# pattern (common in pg_catalog queries) does NOT false-route to PL/SQL.
+_PLSQL_LITERAL_MARKERS = (
     "create or replace package",
     "create or replace type body",
     "dbms_output",
-    "%rowtype",
-    "%type",
     "utl_file",
     "utl_http",
     "bfilename",
@@ -114,6 +114,7 @@ _PLSQL_CONTENT_MARKERS = (
     "pragma exception_init",
     "pragma restrict_references",
 )
+_PLSQL_ROWTYPE_RE = re.compile(r"\w%(?:rowtype|type)\b", re.IGNORECASE)
 
 
 def detect_language(file_path: Path, content: str | None = None) -> str | None:
@@ -129,7 +130,9 @@ def detect_language(file_path: Path, content: str | None = None) -> str | None:
     # Disambiguate .sql vs PL/SQL by content if provided.
     if lang == Language.SQL and content is not None:
         lowered = content.lower()
-        if any(marker in lowered for marker in _PLSQL_CONTENT_MARKERS):
+        if any(marker in lowered for marker in _PLSQL_LITERAL_MARKERS):
+            return Language.PLSQL
+        if _PLSQL_ROWTYPE_RE.search(content):
             return Language.PLSQL
 
     return lang
@@ -139,10 +142,15 @@ def get_adapter(language: str) -> LanguageAdapter:
     """
     Return the adapter for a given canonical language identifier.
 
+    The argument is case-insensitive ("Python", "PYTHON", "python" all work).
+
     Raises ValueError if the language is not supported. Imports are lazy so
     that missing optional dependencies (tree-sitter) only fail when actually
-    needed.
+    needed. Adapter modules MUST NOT do fallible work at import time -- if a
+    future adapter's `__init__` raises, the resulting ImportError surfaces
+    here instead of the documented ValueError.
     """
+    language = language.lower()
     if language == Language.PYTHON:
         from . import python as _mod
         return _mod.adapter

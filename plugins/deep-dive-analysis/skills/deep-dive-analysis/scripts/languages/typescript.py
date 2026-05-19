@@ -22,7 +22,11 @@ from .base import (
     ParseResult,
 )
 from .comments import CommentToken, extract_c_style_comments
-from . import javascript as _js
+
+# NOTE: `javascript` is imported lazily inside the methods/helpers below so a
+# TS-only user with a broken JS grammar package does not see TS parsing fail
+# at module import time. The chain TS -> JS is intentional code reuse but
+# should not be a load-time dependency.
 
 __all__ = ["adapter"]
 
@@ -82,12 +86,20 @@ def _augment_with_ts_constructs(content: str, base: ParseResult) -> ParseResult:
 
 
 def _ts_parse(content: str, is_tsx: bool) -> ParseResult | None:
+    from . import javascript as _js  # lazy import; see module docstring
+
     pair = get_parser("tsx" if is_tsx else "typescript")
     if pair is None:
         return None
     parser, _lang = pair
     src = content.encode("utf-8")
-    tree = parser.parse(src)
+    try:
+        tree = parser.parse(src)
+    except Exception as e:
+        # Mirror the Java/JS pattern: surface via the JS holder so the parent
+        # _JavaScriptAdapter.parse / _TypeScriptAdapter.parse will annotate notes.
+        _js._TS_ERROR_HOLDER["last"] = f"{type(e).__name__}: {e}"
+        return None
 
     def text(n: Any) -> str:
         return node_text(n, src)
@@ -156,6 +168,8 @@ def _ts_parse(content: str, is_tsx: bool) -> ParseResult | None:
     js_result.exported_symbols.extend(ts_exported)
     js_result.exported_symbols = list(dict.fromkeys(js_result.exported_symbols))
     js_result.language = _LANGUAGE_NAME
+    # Re-tag parser provenance so downstream display shows TS, not JS.
+    js_result.notes = [n.replace("=tree-sitter", "=tree-sitter (ts)") for n in js_result.notes]
     return js_result
 
 
@@ -163,19 +177,31 @@ class _TypeScriptAdapter:
     language = _LANGUAGE_NAME
 
     def parse(self, content: str, file_path: str) -> ParseResult:
+        from . import javascript as _js  # lazy import
+
+        _js._TS_ERROR_HOLDER.pop("last", None)
         is_tsx = file_path.lower().endswith(".tsx")
         result = _ts_parse(content, is_tsx=is_tsx)
         if result is None:
             # Fallback: JS regex + TS-only constructs.
             result = _js._regex_parse(content, language=self.language)
             result = _augment_with_ts_constructs(content, result)
+            # Re-tag parser provenance so downstream display shows TS.
+            result.notes = [n.replace("=regex-fallback", "=regex-fallback (ts)") for n in result.notes]
+            err = _js._TS_ERROR_HOLDER.pop("last", None)
+            if err is not None:
+                result.notes.append(f"tree-sitter raised: {err}")
         result.file_path = file_path
         return result
 
     def count_imports(self, content: str) -> int:
+        from . import javascript as _js  # lazy import
+
         return _js.adapter.count_imports(content)
 
     def strip_comments_and_blanks(self, content: str) -> int:
+        from . import javascript as _js  # lazy import
+
         return _js.adapter.strip_comments_and_blanks(content)
 
     def extract_comments(self, content: str) -> list[CommentToken]:

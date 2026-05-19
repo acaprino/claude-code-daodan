@@ -318,12 +318,19 @@ def format_as_summary(analysis: dict[str, Any]) -> str:
     lang = analysis.get("language", "?")
     notes = analysis.get("parser_notes") or []
     note_text = f" ({notes[0]})" if notes else ""
+    # Per the ParseResult docstring: "functions" is top-level only; class
+    # methods live in classes[*].methods. Count both for the "callables"
+    # number so Java files (which always have functions=[]) show the right
+    # total.
+    top_level_funcs = len(struct["functions"])
+    method_count = sum(len(c.get("methods") or []) for c in struct["classes"])
+    callable_total = top_level_funcs + method_count
     lines = [
         f"File: {analysis['file']}",
         f"Language: {lang}{note_text}",
         f"Classification: {cls['level'].upper()} ({cls['reasoning']})",
         f"LOC: {cls['lines_of_code']} | Dependencies: {cls['num_dependencies']}",
-        f"Classes/Types: {len(struct['classes'])} | Functions: {len(struct['functions'])}",
+        f"Classes/Types: {len(struct['classes'])} | Callables: {callable_total} (top-level: {top_level_funcs}, methods: {method_count})",
         f"Exported: {', '.join(struct['exported_symbols'][:5])}{'...' if len(struct['exported_symbols']) > 5 else ''}",
         f"Internal deps: {len(analysis['dependencies']['internal'])} | External deps: {len(analysis['dependencies']['external'])}",
     ]

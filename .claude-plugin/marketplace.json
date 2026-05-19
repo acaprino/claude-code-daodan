@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "Claude Code Daodan -- 43 plugins that augment Claude Code into a specialized toolkit. Agents, skills, and commands for code quality, Tauri/Rust development, frontend, AI tooling, scraping, trading, observability, reverse engineering, constraint programming, libGDX game development, and Kotlin (coroutines, KMP, Compose, Ktor).",
-    "version": "6.18.0"
+    "version": "6.18.1"
   },
   "plugins": [
     {
@@ -38,7 +38,7 @@
       "name": "deep-dive-analysis",
       "source": "./plugins/deep-dive-analysis",
       "description": "Multi-language systematic codebase analysis (Python, Java, JavaScript, TypeScript, SQL, PL/SQL) -- analyzes architecture, traces data flows, detects anti-patterns, and generates structured documentation for onboarding, architecture review, or code documentation",
-      "version": "1.8.0",
+      "version": "1.8.1",
       "author": {
         "name": "Alfio"
       },

@@ -71,16 +71,35 @@ _IPC_CONSTRUCTORS = frozenset([
     "Popen", "Process", "Pool",
 ])
 
-_COMMON_EXTERNAL_PREFIXES = frozenset([
-    "os", "sys", "re", "json", "typing", "collections", "dataclasses",
-    "pathlib", "asyncio", "logging", "datetime", "time", "random",
-    "functools", "itertools", "contextlib", "abc", "enum", "uuid",
-    "hashlib", "base64", "urllib", "http", "email", "html", "xml",
-    "sqlite3", "socket", "threading", "multiprocessing", "subprocess",
-    "unittest", "pytest", "mock", "requests", "aiohttp", "httpx",
-    "pydantic", "sqlalchemy", "django", "flask", "fastapi", "celery",
-    "redis", "kafka", "boto3", "numpy", "pandas", "scipy",
-])
+import sys
+
+
+def _build_external_prefixes() -> frozenset[str]:
+    """
+    Build the "treat as external" prefix set from the stdlib plus a curated
+    list of common third-party packages. `sys.stdlib_module_names` is Python
+    3.10+ and covers every stdlib module name exhaustively, which fixes the
+    historical false-positive on `argparse`, `enum`, `sys`, etc.
+    """
+    stdlib = getattr(sys, "stdlib_module_names", None) or frozenset({
+        # Fallback for Python < 3.10 -- approximate but covers what we cared
+        # about historically.
+        "os", "sys", "re", "json", "typing", "collections", "dataclasses",
+        "pathlib", "asyncio", "logging", "datetime", "time", "random",
+        "functools", "itertools", "contextlib", "abc", "enum", "uuid",
+        "hashlib", "base64", "urllib", "http", "email", "html", "xml",
+        "sqlite3", "socket", "threading", "multiprocessing", "subprocess",
+        "unittest", "argparse", "io",
+    })
+    third_party = frozenset({
+        "pytest", "mock", "requests", "aiohttp", "httpx",
+        "pydantic", "sqlalchemy", "django", "flask", "fastapi", "celery",
+        "redis", "kafka", "boto3", "numpy", "pandas", "scipy",
+    })
+    return frozenset(stdlib) | third_party
+
+
+_COMMON_EXTERNAL_PREFIXES = _build_external_prefixes()
 
 
 def _annotation_str(node: ast.expr | None) -> str | None:
