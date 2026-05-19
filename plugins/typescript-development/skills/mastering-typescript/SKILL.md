@@ -1,33 +1,9 @@
 ---
 name: mastering-typescript
-description: |
-  Master enterprise-grade TypeScript development with type-safe patterns, modern tooling, and framework integration. This skill provides comprehensive guidance for TypeScript 5.9+, covering type system fundamentals (generics, mapped types, conditional types, satisfies operator), enterprise patterns (error handling, validation with Zod), React integration for type-safe frontends, NestJS for scalable APIs, and LangChain.js for AI applications. Use when building type-safe applications, migrating JavaScript codebases, configuring modern toolchains (Vite 7, pnpm, ESLint, Vitest), implementing advanced type patterns, or comparing TypeScript with Java/Python approaches.
-version: 1.0.0
-category: programming-languages
-triggers:
-  - typescript
-  - ts
-  - type-safe
-  - generics
-  - nestjs typescript
-  - react typescript
-  - typescript migration
-  - tsconfig
-  - type guards
-  - mapped types
-  - conditional types
-  - satisfies operator
-  - zod validation
-author: Richard Hightower
-license: MIT
-tags:
-  - typescript
-  - type-safety
-  - enterprise
-  - react
-  - nestjs
-  - langchain
-  - vite
+description: >
+  Enterprise-grade TypeScript depth covering the advanced type system (generics, mapped/conditional types, satisfies operator, branded types, discriminated unions, template literal types), JS-to-TS migration playbooks, modern toolchain setup (tsconfig strict, Vite 7, Vitest, ESLint 9 flat config, pnpm), validation patterns with Zod, type-safe React integration, NestJS API design, and LangChain.js typing.
+  TRIGGER WHEN: migrating a JavaScript codebase to TypeScript, bootstrapping a new TS project (tsconfig + ESLint + Vite/Vitest), writing or refactoring code that uses advanced type patterns (generics, mapped/conditional types, satisfies, branded types), designing Zod schemas for runtime validation, building type-safe NestJS APIs, doing deep React + TypeScript work (typed hooks, generic components, discriminated props), or typing LangChain.js applications. Also trigger when comparing TypeScript with Java/Python enterprise approaches.
+  DO NOT TRIGGER WHEN: writing routine TS/JS without advanced type work (use typescript-development:typescript-write), reviewing React performance specifically (use react-development:review-react), tuning Node.js bundling/packaging unrelated to TS, or doing dead-code detection alone (use typescript-development:knip).
 ---
 
 Source: SpillwaveSolutions/mastering-typescript-skill - `mastering-typescript/SKILL.md`
