@@ -1,7 +1,7 @@
 ---
 name: deep-dive-analysis
 description: >
-  AI-powered systematic codebase analysis. Combines structure extraction with semantic understanding to produce documentation capturing WHAT, WHY, HOW, and CONSEQUENCES. Multi-language: Python, Java, JavaScript, TypeScript, SQL, PL/SQL. Includes pattern recognition, red flag detection, flow tracing, and quality assessment.
+  AI-powered systematic codebase analysis. Combines structure extraction with semantic understanding to produce documentation capturing WHAT, WHY, HOW, and CONSEQUENCES. Multi-language: Python, Java, JavaScript, TypeScript, SQL, PL/SQL, Rust. Includes pattern recognition, red flag detection, flow tracing, and quality assessment.
   TRIGGER WHEN: encountering unfamiliar code, before major refactoring, or when documentation is stale or missing
   DO NOT TRIGGER WHEN: the task is outside the specific scope of this component.
 ---
@@ -27,6 +27,7 @@ This skill combines **mechanical structure extraction** with **Claude's semantic
 | TypeScript | `.ts`, `.tsx`, `.mts`, `.cts` | tree-sitter (preferred) or regex; adds interfaces, enums, type aliases | `//`, `/* */`, JSDoc `/** */` |
 | SQL | `.sql`, `.ddl`, `.dml` | regex DDL (tables, views, indexes, sequences, types, functions, procedures, triggers) | `--`, `/* */` |
 | PL/SQL (Oracle) | `.pks`, `.pkb`, `.plsql`, `.pls`, `.pck`, `.prc`, `.fnc`, `.trg` | regex (packages, package bodies, type bodies, cursors, exceptions, %TYPE/%ROWTYPE references) | `--`, `/* */` |
+| Rust | `.rs` | tree-sitter (preferred) or regex; structs, enums, traits, impls (with `Trait for Type` naming), mods, unions, type aliases | `//`, `/* */`, rustdoc `///` / `//!` / `/** */` / `/*! */` |
 
 `.sql` files are disambiguated against PL/SQL by inspecting content for Oracle-specific markers (`CREATE OR REPLACE PACKAGE`, `DBMS_OUTPUT`, `%TYPE`, `%ROWTYPE`, `UTL_FILE`, `PRAGMA AUTONOMOUS`, etc.). PostgreSQL `plpgsql` is correctly classified as SQL.
 
@@ -45,6 +46,7 @@ What changes when tree-sitter is installed:
 
 - **Java**: nested classes, generic type parameters, annotations, multi-line declarations parsed correctly. Without it, the regex fallback still finds top-level classes, methods, imports, and constants.
 - **JavaScript / TypeScript**: arrow functions in object/class properties, decorators, template literals, JSX elements parsed correctly. Without it, the regex fallback handles top-level declarations, ES6 `import`/`export`, and CommonJS `require`.
+- **Rust**: lifetimes, generic bounds (`where` clauses), impl blocks with trait bounds, attribute macros parsed correctly. Without it, the regex fallback still finds top-level fns, structs/enums/traits/impls/mods, use declarations, and UPPER_CASE constants.
 - **Python / SQL / PL-SQL**: no change. Python always uses stdlib `ast`; SQL/PL-SQL always use the regex DDL extractor.
 
 The active parser is reported in `ParseResult.notes` and in the CLI output: `parser=stdlib-ast`, `parser=tree-sitter`, or `parser=regex-fallback`.
@@ -365,10 +367,10 @@ SECURITY:
   - `rewrite_comments.py` - comment quality CLI (scan / analyze / rewrite / report)
   - `doc_review.py` - documentation maintenance (Phase 8)
   - `check_progress.py` / `progress_tracker.py` - phase progress tracking
-  - `languages/` - per-language adapters (Python `ast`, Java/JS/TS via tree-sitter or regex, SQL/PL-SQL regex)
+  - `languages/` - per-language adapters (Python `ast`, Java/JS/TS/Rust via tree-sitter or regex, SQL/PL-SQL regex)
     - `base.py` - shared dataclasses + `LanguageAdapter` Protocol
     - `__init__.py` - extension dispatch (`detect_language`, `get_adapter`)
-    - `comments.py` - per-language comment lexer
+    - `comments.py` - per-language comment lexer (includes rustdoc post-processor)
     - `_treesitter.py` - optional tree-sitter loader with fallbacks
-    - `python.py`, `java.py`, `javascript.py`, `typescript.py`, `sql.py`, `plsql.py`
+    - `python.py`, `java.py`, `javascript.py`, `typescript.py`, `sql.py`, `plsql.py`, `rust.py`
   - `requirements.txt` - optional dependencies (tree-sitter + language-pack, click)

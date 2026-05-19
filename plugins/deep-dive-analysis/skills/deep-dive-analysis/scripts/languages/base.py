@@ -55,6 +55,12 @@ Kind = Literal[
     "package",
     "package-body",
     "type-body",
+    # Rust-specific kinds:
+    "struct",
+    "trait",
+    "impl",
+    "mod",
+    "union",
 ]
 
 

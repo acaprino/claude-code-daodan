@@ -54,6 +54,7 @@ class Language:
     TYPESCRIPT = "typescript"
     SQL = "sql"
     PLSQL = "plsql"
+    RUST = "rust"
 
 
 SUPPORTED_LANGUAGES: tuple[str, ...] = (
@@ -63,6 +64,7 @@ SUPPORTED_LANGUAGES: tuple[str, ...] = (
     Language.TYPESCRIPT,
     Language.SQL,
     Language.PLSQL,
+    Language.RUST,
 )
 
 
@@ -92,6 +94,8 @@ SUPPORTED_EXTENSIONS: dict[str, str] = {
     ".prc": Language.PLSQL,  # Procedure
     ".fnc": Language.PLSQL,  # Function
     ".trg": Language.PLSQL,  # Trigger
+    # Rust.
+    ".rs": Language.RUST,
 }
 
 
@@ -168,5 +172,8 @@ def get_adapter(language: str) -> LanguageAdapter:
         return _mod.adapter
     if language == Language.PLSQL:
         from . import plsql as _mod
+        return _mod.adapter
+    if language == Language.RUST:
+        from . import rust as _mod
         return _mod.adapter
     raise ValueError(f"Unsupported language: {language!r}")

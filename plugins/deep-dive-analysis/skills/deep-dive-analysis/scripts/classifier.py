@@ -158,6 +158,24 @@ COMPLEXITY_PATTERNS_PER_LANG: dict[str, list[str]] = {
         r"\bBULK\s+COLLECT\b",
         r"\bAUTHID\s+CURRENT_USER\b",
     ],
+    "rust": [
+        r"\basync\s+fn\b",
+        r"\bawait\b",
+        r"\bunsafe\b",
+        r"\bArc<",
+        r"\bMutex<",
+        r"\bRwLock<",
+        r"\bRefCell<",
+        r"\bCell<",
+        r"\btokio::spawn\b",
+        r"\bstd::thread::spawn\b",
+        r"\bmpsc::channel\b",
+        r"\boneshot::channel\b",
+        r"\bbroadcast::channel\b",
+        r"\bBox<dyn\s+Future",
+        r"\bPin<",
+        r"\bSend\s*\+\s*Sync\b",
+    ],
 }
 
 

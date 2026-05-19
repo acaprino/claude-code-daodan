@@ -203,6 +203,12 @@ _CODE_PATTERNS_BY_LANG: dict[str, list[re.Pattern[str]]] = {
     "plsql": [
         re.compile(r"^\s*--\s*(?:DECLARE|BEGIN|END|EXCEPTION|PROCEDURE|FUNCTION|PACKAGE|TYPE|CURSOR|RETURN|RAISE|IF|FOR|WHILE|LOOP|CALL|EXEC|SELECT|INSERT|UPDATE|DELETE|MERGE|CREATE|ALTER|DROP|GRANT|REVOKE|COMMIT|ROLLBACK)\b", re.IGNORECASE),
     ],
+    "rust": [
+        re.compile(r"^\s*//\s*(?:pub|fn|struct|enum|trait|impl|mod|use|let|const|static|return|if|for|while|match|loop|unsafe|async|await|extern)\b"),
+        re.compile(r"^\s*//\s*\w+\s*[=(]"),
+        re.compile(r"^\s*//\s*\w+(?:::\w+)+\s*[\(<]"),
+        re.compile(r"^\s*//\s*#\["),  # attribute
+    ],
 }
 
 # Per-language trivial comment indicators: (comment_pattern, code_pattern).
@@ -250,6 +256,14 @@ _TRIVIAL_INDICATORS_BY_LANG: dict[str, list[tuple[re.Pattern[str], re.Pattern[st
         (re.compile(r"--\s*begin\b", re.IGNORECASE), re.compile(r"\bBEGIN\b", re.IGNORECASE)),
         (re.compile(r"--\s*end\b", re.IGNORECASE), re.compile(r"\bEND\b", re.IGNORECASE)),
         (re.compile(r"--\s*raise\b", re.IGNORECASE), re.compile(r"\bRAISE\b", re.IGNORECASE)),
+    ],
+    "rust": [
+        (re.compile(r"//\s*increment\b", re.IGNORECASE), re.compile(r"\+\+|\+=\s*1")),
+        (re.compile(r"//\s*decrement\b", re.IGNORECASE), re.compile(r"--|-=\s*1")),
+        (re.compile(r"//\s*return\b", re.IGNORECASE), re.compile(r"\breturn\b")),
+        (re.compile(r"//\s*loop\b", re.IGNORECASE), re.compile(r"\bfor\b|\bwhile\b|\bloop\b")),
+        (re.compile(r"//\s*use\b", re.IGNORECASE), re.compile(r"\buse\b")),
+        (re.compile(r"//\s*match\b", re.IGNORECASE), re.compile(r"\bmatch\b")),
     ],
 }
 
@@ -315,6 +329,8 @@ def _run_formatter(file_path: Path, language: str) -> None:
         candidates = [["prettier", "--write", str(file_path)], ["biome", "format", "--write", str(file_path)]]
     elif language in ("sql", "plsql"):
         candidates = [["sqlfluff", "fix", "--dialect", "ansi" if language == "sql" else "oracle", str(file_path)]]
+    elif language == "rust":
+        candidates = [["rustfmt", str(file_path)]]
     for cmd in candidates:
         try:
             subprocess.run(cmd, capture_output=True, timeout=30)
@@ -799,6 +815,7 @@ def _line_marker_for(language: str) -> str:
         "typescript": "//",
         "sql": "--",
         "plsql": "--",
+        "rust": "//",
     }.get(language, "#")
 
 

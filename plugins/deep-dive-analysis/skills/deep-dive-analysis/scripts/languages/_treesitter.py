@@ -53,6 +53,7 @@ _LANG_PACK_ALIASES = {
     "typescript": "typescript",
     "tsx": "tsx",
     "sql": "sql",
+    "rust": "rust",
 }
 
 
@@ -103,6 +104,7 @@ def get_parser(language: str) -> tuple[Any, Any] | None:
             "typescript": "tree_sitter_typescript",
             "tsx": "tree_sitter_typescript",
             "sql": "tree_sitter_sql",
+            "rust": "tree_sitter_rust",
         }.get(pack_name)
         if import_name is None:
             return None

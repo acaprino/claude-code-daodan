@@ -23,6 +23,7 @@ __all__ = [
     "extract_python_comments",
     "extract_c_style_comments",
     "extract_sql_comments",
+    "extract_rust_comments",
 ]
 
 
@@ -150,6 +151,48 @@ _SQL_SYNTAX = CommentSyntax(
 
 def extract_sql_comments(source: str) -> list[CommentToken]:
     return _extract_with_syntax(source, _SQL_SYNTAX)
+
+
+# ---------------------------------------------------------------------------
+# Rust: same C-style lexer, plus post-processing to flag doc comments.
+# `///` and `//!` (line) and `/** */` and `/*! */` (block) are rustdoc.
+# ---------------------------------------------------------------------------
+
+
+def extract_rust_comments(source: str) -> list[CommentToken]:
+    """
+    Extract Rust comments using the C-style lexer, then post-process to
+    flag rustdoc tokens: `///` and `//!` for line comments, `/** */` and
+    `/*! */` for block comments.
+
+    Note: `/** */` is ALREADY flagged as is_doc_block by _extract_with_syntax
+    via the doc_block_open marker. We only need to handle the three
+    rust-specific cases: `///`, `//!`, and `/*! */`.
+    """
+    tokens = _extract_with_syntax(source, _C_STYLE_SYNTAX)
+    for tok in tokens:
+        raw = tok.raw_text.lstrip()
+        if not tok.is_block:
+            # Line comment: check for /// or //! markers.
+            if raw.startswith("///") or raw.startswith("//!"):
+                tok.is_doc_block = True
+                # Strip the extra marker char from text.
+                if raw.startswith("///"):
+                    tok.text = raw[3:].strip()
+                else:
+                    tok.text = raw[3:].strip()
+        else:
+            # Block comment: /*! */ is rustdoc inner-doc-block.
+            if raw.startswith("/*!"):
+                tok.is_doc_block = True
+                # Strip /*! and trailing */
+                body = raw
+                if body.startswith("/*!"):
+                    body = body[3:]
+                if body.endswith("*/"):
+                    body = body[:-2]
+                tok.text = body.strip()
+    return tokens
 
 
 # ---------------------------------------------------------------------------
