@@ -231,11 +231,20 @@ def audit(fix=False):
         if not SEMVER_PATTERN.match(str(pversion)):
             report.add("warning", f"Plugin '{pname}': version '{pversion}' is not valid semver")
 
-        # Check source directory exists
+        # Check local source directories and accept supported remote sources.
         source = plugin.get("source", "")
-        source_path = PROJECT_ROOT / source.lstrip("./")
-        if not source_path.is_dir():
-            report.add("critical", f"Plugin '{pname}': source directory missing: {source}")
+        source_path = None
+        if isinstance(source, str):
+            source_path = PROJECT_ROOT / source.lstrip("./")
+            if not source_path.is_dir():
+                report.add("critical", f"Plugin '{pname}': source directory missing: {source}")
+        elif isinstance(source, dict):
+            source_kind = source.get("source")
+            repo = source.get("repo")
+            if source_kind != "github" or not isinstance(repo, str) or not repo:
+                report.add("critical", f"Plugin '{pname}': unsupported remote source: {source}")
+        else:
+            report.add("critical", f"Plugin '{pname}': invalid source: {source}")
 
         # Check agents
         agents = plugin.get("agents", [])
@@ -243,6 +252,12 @@ def audit(fix=False):
             report.stats["plugins_with_agents"] += 1
         for agent_path in agents:
             report.stats["agents"] += 1
+            if source_path is None:
+                report.add(
+                    "critical",
+                    f"Plugin '{pname}': remote source cannot declare local agent: {agent_path}",
+                )
+                continue
             full_path = source_path / agent_path.lstrip("./")
             registered_agent_files.add(full_path.resolve())
 
@@ -321,6 +336,12 @@ def audit(fix=False):
             report.stats["plugins_with_skills"] += 1
         for skill_path in skills:
             report.stats["skills"] += 1
+            if source_path is None:
+                report.add(
+                    "critical",
+                    f"Plugin '{pname}': remote source cannot declare local skill: {skill_path}",
+                )
+                continue
             full_path = source_path / skill_path.lstrip("./")
             registered_skill_dirs.add(full_path.resolve())
 
@@ -351,6 +372,12 @@ def audit(fix=False):
             report.stats["plugins_with_commands"] += 1
         for cmd_path in commands:
             report.stats["commands"] += 1
+            if source_path is None:
+                report.add(
+                    "critical",
+                    f"Plugin '{pname}': remote source cannot declare local command: {cmd_path}",
+                )
+                continue
             full_path = source_path / cmd_path.lstrip("./")
             registered_command_files.add(full_path.resolve())
 
@@ -430,7 +457,7 @@ def audit(fix=False):
     for plugin in plugins:
         pname = plugin.get("name", "")
         source = plugin.get("source", "")
-        if source:
+        if isinstance(source, str) and source:
             dir_name = source.rstrip("/").rsplit("/", 1)[-1]
             if pname and dir_name and pname != dir_name:
                 report.add(
@@ -445,10 +472,15 @@ def audit(fix=False):
         try:
             claude_content = claude_md.read_text(encoding="utf-8")
             # Look for "# <project-name>" header
-            header_match = re.search(r"^#\s+(\S+)", claude_content, re.MULTILINE)
+            header_match = re.search(r"^#\s+(.+?)\s*$", claude_content, re.MULTILINE)
             if header_match:
-                claude_project_name = header_match.group(1)
-                if marketplace_name and claude_project_name != marketplace_name:
+                claude_project_name = re.sub(
+                    r"[^a-z0-9]+", "-", header_match.group(1).lower()
+                ).strip("-")
+                normalized_marketplace_name = re.sub(
+                    r"[^a-z0-9]+", "-", marketplace_name.lower()
+                ).strip("-")
+                if marketplace_name and claude_project_name != normalized_marketplace_name:
                     report.add(
                         "warning",
                         f"Marketplace name '{marketplace_name}' does not match "
@@ -463,6 +495,8 @@ def audit(fix=False):
     for plugin in plugins:
         pname = plugin.get("name", "<unnamed>")
         source = plugin.get("source", "")
+        if not isinstance(source, str):
+            continue
         source_path = PROJECT_ROOT / source.lstrip("./")
         colors_in_plugin = set()
         for agent_path in plugin.get("agents", []):

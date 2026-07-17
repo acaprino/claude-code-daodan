@@ -259,6 +259,8 @@ def main():
             continue
 
         psource = plugin.get("source", f"./plugins/{pname}")
+        if not isinstance(psource, str):
+            continue
         pdir = PROJECT_ROOT / psource.lstrip("./")
 
         plugin_results = {"name": pname, "version": plugin.get("version", "?"), "skills": [], "agents": []}
