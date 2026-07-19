@@ -2,16 +2,16 @@
 
 # Claude Code Daodan
 
-**43 specialized plugins that augment Claude Code into a specialized toolkit -- so you spend less time prompting and more time shipping.**
+**46 specialized plugins augment Claude Code, so you spend less time prompting and more time shipping.**
 
 > The Daodan is the symbiote that enhances its host. This marketplace is the Daodan of Claude Code.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue?style=flat)](LICENSE)
-[![Marketplace](https://img.shields.io/badge/marketplace-v6.7.1-green?style=flat)](.claude-plugin/marketplace.json)
-[![Plugins](https://img.shields.io/badge/plugins-43-orange?style=flat)](#plugins)
-[![Agents](https://img.shields.io/badge/agents-71-purple?style=flat)](#plugins)
-[![Skills](https://img.shields.io/badge/skills-72-teal?style=flat)](#plugins)
-[![Commands](https://img.shields.io/badge/commands-59-red?style=flat)](#plugins)
+[![Marketplace](https://img.shields.io/badge/marketplace-v6.28.0-green?style=flat)](.claude-plugin/marketplace.json)
+[![Plugins](https://img.shields.io/badge/plugins-46-orange?style=flat)](#plugins)
+[![Agents](https://img.shields.io/badge/agents-77-purple?style=flat)](#plugins)
+[![Skills](https://img.shields.io/badge/skills-74-teal?style=flat)](#plugins)
+[![Commands](https://img.shields.io/badge/commands-64-red?style=flat)](#plugins)
 
 </div>
 
@@ -99,6 +99,11 @@ That's it. Plugins activate automatically when relevant -- or invoke them direct
 | **[codebase-cleanup](docs/plugins/codebase-cleanup.md)** | Multi-language dependency security audits, SOLID refactoring, prioritized tech-debt roadmaps | - | - | 3 |
 | **[libgdx-development](docs/plugins/libgdx-development.md)** | libGDX cross-platform game dev -- rendering pipeline, Scene2D + Ashley ECS, Box2D, AssetManager, deploy to Desktop/Android/iOS/HTML5, /libgdx-audit | 1 | 1 | 1 |
 | **[kotlin-development](docs/plugins/kotlin-development.md)** | Idiomatic Kotlin -- coroutines, Flow/StateFlow, Kotlin Multiplatform (KMP), Jetpack Compose, Ktor server, type-safe DSLs | - | 1 | - |
+| **[pwa-expert](plugins/pwa-expert)** | Progressive Web App architecture, audits, scaffolding, and production checklists | 1 | 1 | 3 |
+| **[abstraction-architect](plugins/abstraction-architect)** | Audit missed unification and wrong abstractions | 1 | 1 | 1 |
+| **[hermes-tweet](https://github.com/Xquik-dev/hermes-tweet)** | X/Twitter research and automation for Hermes Agent through Xquik | - | - | - |
+
+Xquik is an independent third-party service. Not affiliated with X Corp. "Twitter" and "X" are trademarks of X Corp.
 
 **A** = Agents, **S** = Skills, **C** = Commands
 
@@ -132,7 +137,7 @@ claude-code-daodan/
 │   │   └── commands/          # slash-command .md files
 │   ├── senior-review/
 │   ├── frontend/
-│   └── ...                    # 43 plugins total
+│   └── ...                    # 46 plugins total
 ├── LICENSE
 └── README.md
 ```
@@ -152,7 +157,7 @@ claude plugin install ./claude-code-daodan/plugins/python-development
 <details>
 <summary><b>Recommended Settings (skill visibility)</b></summary>
 
-With 43 plugins installed, Claude Code's default skill-listing budget can truncate the list of available skills shown at conversation start. Raise the fraction of context allocated to the skill listing in `~/.claude/settings.json`:
+With 46 plugins installed, Claude Code's default skill-listing budget can truncate the list of available skills shown at conversation start. Raise the fraction of context allocated to the skill listing in `~/.claude/settings.json`:
 
 ```json
 {

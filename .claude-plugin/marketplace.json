@@ -5,8 +5,8 @@
     "email": ""
   },
   "metadata": {
-    "description": "Claude Code Daodan -- 45 plugins that augment Claude Code into a specialized toolkit. Agents, skills, and commands for code quality, Tauri/Rust development, frontend, AI tooling, scraping, trading, observability, reverse engineering, constraint programming, libGDX game development, Kotlin (coroutines, KMP, Compose, Ktor), Progressive Web Apps, and pure-architecture audits (missed unification, wrong abstractions).",
-    "version": "6.27.0"
+    "description": "Claude Code Daodan: 46 plugins that augment Claude Code into a specialized toolkit. Agents, skills, and commands for code quality, Tauri/Rust development, frontend, AI tooling, scraping, trading, observability, reverse engineering, constraint programming, libGDX game development, Kotlin (coroutines, KMP, Compose, Ktor), Progressive Web Apps, and pure-architecture audits (missed unification, wrong abstractions).",
+    "version": "6.28.0"
   },
   "plugins": [
     {
@@ -638,6 +638,32 @@
         "./commands/ga4-audit.md",
         "./commands/llm-seo-audit.md"
       ]
+    },
+    {
+      "name": "hermes-tweet",
+      "source": {
+        "source": "github",
+        "repo": "Xquik-dev/hermes-tweet"
+      },
+      "description": "Native Hermes Agent plugin for X/Twitter research and automation through Xquik. Xquik is an independent third-party service. Not affiliated with X Corp. \"Twitter\" and \"X\" are trademarks of X Corp.",
+      "version": "0.1.8",
+      "author": {
+        "name": "Xquik",
+        "url": "https://github.com/Xquik-dev"
+      },
+      "license": "MIT",
+      "keywords": [
+        "hermes-agent",
+        "hermes-plugin",
+        "xquik",
+        "x-twitter",
+        "twitter",
+        "social-media",
+        "automation",
+        "agent-tools"
+      ],
+      "category": "communication",
+      "strict": false
     },
     {
       "name": "senior-review",
